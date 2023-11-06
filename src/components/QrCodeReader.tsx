@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 type Props = {
@@ -29,21 +29,17 @@ export default function QRCodeReader(props: Props) {
     };
     
     return (
-        <View style={styles.container}>
-          <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={styles.scanner}
-          >
-            <View style={styles.framecode}></View>
-          </BarCodeScanner>
-        </View>
-      );
-    }
+      <View style={styles.container}>
+        <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={styles.scanner}>
+          <View style={styles.framecode}></View>
+        </BarCodeScanner>
+      </View>
+    );
+}
 
     
 const styles = StyleSheet.create({
     container: {
-    //   flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
     },
