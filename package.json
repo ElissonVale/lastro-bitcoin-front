@@ -9,10 +9,20 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/stack": "^6.3.20",
+    "bitcoinjs-lib": "^6.1.5",
     "expo": "~49.0.15",
+    "expo-barcode-scanner": "~12.5.3",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
-    "react-native": "0.72.6"
+    "react-native": "^0.72.6",
+    "react-native-camera": "^4.2.1",
+    "react-native-keychain": "^8.1.2",
+    "react-native-linear-gradient": "^2.8.3",
+    "react-native-permissions": "^3.10.1",
+    "react-native-qrcode-scanner": "^1.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
