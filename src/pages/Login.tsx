@@ -1,17 +1,25 @@
-import { ButtonDanger, ButtonPrimary, ButtonSuccess } from '../components/Buttons';
+import { ButtonDefault } from '../components/Buttons';
+import WalletInput from '../components/WalletInput';
+import Header from '../components/Header';
 import styles from '../styledsheet/Styles';
 import { Text, View } from 'react-native';
 
 const Login = ({ navigation } : any) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login Page</Text>
+            
+            <Header title='Sig In' action={() => navigation.navigate('Initialize')}></Header>
 
-            <View style={{ position: "absolute", bottom: 25, left: 10, width: "45%" }}>
-                <ButtonDanger title="Back" onPress={() => navigation.navigate('Initialize')}/>                
+            <View style={styles.containerDescription}>
+                <Text style={styles.description}>
+                To log in to your account, simply scan the QR code of your private key. If you have access to the app on another smartphone, just go to settings - extract private key.
+                </Text>
             </View>
-            <View style={{ position: "absolute", bottom: 25, right: 10, width: "45%" }}>
-                <ButtonSuccess title="Sig In" onPress={() => navigation.navigate('Register')} />
+
+            <WalletInput id='walletAddress' />
+
+            <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
+                <ButtonDefault title="Sig In" onPress={() => navigation.navigate('Register')} />
             </View>
         </View>
     )

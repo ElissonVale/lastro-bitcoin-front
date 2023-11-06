@@ -1,20 +1,29 @@
 import { View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import QRCodeReaderModal from '../components/QrCodeReader';
+import { useState } from 'react';
 
 type Props = {
-    id: string,
-    onPress: () => void,
-    value: string | undefined
+    id: string | undefined,
 }
 
 const WalletInput = (props: Props) => {
-    
+
+    const [qrReader, setQrReader] = useState(false);
+    const [qrValue, setQrValue] = useState("");
+
+    const handleInput = (text: string) => {
+        setQrValue(text);
+    }
+
     return (
         <View style={styles.conatiner}>
-            <TextInput id={props.id} placeholderTextColor="#FFF" placeholder="Wallet Address" value={props.value} style={styles.input}/>
-            <TouchableOpacity style={styles.button}  onPress={props.onPress}>
+            <TextInput id={props.id} placeholderTextColor="#FFF" onChangeText={handleInput} placeholder="Wallet Address"  value={qrValue} style={styles.input}/>
+            <TouchableOpacity style={styles.button}  onPress={() => { setQrReader(true) }}>
                 <Ionicons name="qr-code" size={28} color="white" style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
+
+            <QRCodeReaderModal setValue={setQrValue} visible={qrReader} runClose={setQrReader}/>
         </View>              
     );
 }

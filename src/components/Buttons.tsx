@@ -37,6 +37,14 @@ const ButtonDefault = (params: Props) => {
     );
 }
 
+const ButtonHead = (params: Props) => {
+    return (
+    <TouchableOpacity style={[styles.button, styles.ButtonDefault]} onPress={params.onPress}>
+        <Text style={styles.buttonText}>{params.title}</Text>
+    </TouchableOpacity>
+    )
+}
+
 const styles = StyleSheet.create({
     button: {
         margin: 10,
