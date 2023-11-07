@@ -1,5 +1,5 @@
 import * as Keychain from 'react-native-keychain';
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const Authenticate = (children: any) => {
 
@@ -12,4 +12,21 @@ const Authenticate = (children: any) => {
     Keychain.setGenericPassword("elima", "public_key");
 }
 
-export default Authenticate;
+type Keys = {
+    publicKey: string,
+    privateKey: string
+}
+
+const GenerateKeys = () : Keys => {
+    const [publicKey, setPublicKey] = useState(null);
+    const [privateKey, setPrivateKey] = useState(null);
+
+
+
+    return {
+        publicKey :"", // crypto.randomBytes(32).toString('hex'),
+        privateKey: "" //crypto.randomBytes(64).toString('hex')
+    };
+}
+
+export {Authenticate, GenerateKeys};

@@ -4,26 +4,22 @@ import QRCodeReaderModal from '../components/QrCodeReader';
 import { useState } from 'react';
 
 type Props = {
-    id: string | undefined,
+    value: string | undefined,
+    setValue: (data: string) => void
 }
 
 const WalletInput = (props: Props) => {
 
     const [qrReader, setQrReader] = useState(false);
-    const [qrValue, setQrValue] = useState("");
-
-    const handleInput = (text: string) => {
-        setQrValue(text);
-    }
 
     return (
         <View style={styles.conatiner}>
-            <TextInput id={props.id} placeholderTextColor="#FFF" onChangeText={handleInput} placeholder="Wallet Address"  value={qrValue} style={styles.input}/>
+            <TextInput value={props.value} placeholderTextColor="#FFF" onChangeText={props.setValue} placeholder="Wallet Address"  style={styles.input}/>
             <TouchableOpacity style={styles.button}  onPress={() => { setQrReader(true) }}>
                 <Ionicons name="qr-code" size={28} color="white" style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
 
-            <QRCodeReaderModal setValue={setQrValue} visible={qrReader} runClose={setQrReader}/>
+            <QRCodeReaderModal setValue={props.setValue} visible={qrReader} runClose={setQrReader}/>
         </View>              
     );
 }

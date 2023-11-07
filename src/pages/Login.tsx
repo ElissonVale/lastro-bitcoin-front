@@ -3,8 +3,12 @@ import WalletInput from '../components/WalletInput';
 import Header from '../components/Header';
 import styles from '../styledsheet/Styles';
 import { Text, View } from 'react-native';
+import { useState } from 'react';
 
 const Login = ({ navigation } : any) => {
+
+    const [key, setKey] = useState("");
+
     return (
         <View style={styles.container}>
             
@@ -16,7 +20,7 @@ const Login = ({ navigation } : any) => {
                 </Text>
             </View>
 
-            <WalletInput id='walletAddress' />
+            <WalletInput value={key} setValue={setKey} />
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
                 <ButtonDefault title="Sig In" onPress={() => navigation.navigate('Register')} />
