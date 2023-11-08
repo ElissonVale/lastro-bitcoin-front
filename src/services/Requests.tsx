@@ -1,22 +1,30 @@
 import axios from "axios";
-import Config from 'react-native-config'
+import env from "../../app.configs";
 
 const API = axios.create({
-    baseURL: Config.API_URL,
+    baseURL: env.API_URL,
     headers: {
-        Authorization: Config.API_KEY
+        apiKey: env.API_KEY,
+        Authorization: env.API_KEY
     }
 });
 
 const Request = {
     Post: (pointer: string, data: {} | undefined, callback: (data: any) => void) => {
-        console.log(`Http post: ${Config.API_URL}`)
-        API.post(pointer, data).then(callback).catch(error => console.log(error))
+        console.log(`Http post: ${env.API_URL}${pointer}`);
+        
+        return API.post(pointer, data)
+        .then(response => { 
+            callback(response.data);
+        }).catch(error => console.log(error));
     },
 
     Get: (pointer: string, data: {} | undefined, callback: (data: any) => void) => {
-        console.log(`http get: ${Config.API_URL}`)
-        API.get(pointer, data).then(callback).catch(error => console.log(error))
+        console.log(`http get: ${env.API_URL}${pointer}`);
+        return API.get(pointer, data)
+        .then(response => {
+            callback(response.data);
+        }).catch(error => console.log(error));
     }
 }
 

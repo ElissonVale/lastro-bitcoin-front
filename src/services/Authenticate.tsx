@@ -1,14 +1,21 @@
-import { useState } from 'react';
 import * as CryptoJs from 'react-native-crypto-js'
 import * as SecureStorage from 'expo-secure-store'
 import Request from './Requests';
-import Config from 'react-native-config'
+import env from '../../app.configs';
 
-const Authenticate = (children: any) => {
+type PropsCallback = (data: boolean) => void | undefined;
 
-    const [isLogged, setIsLogged] = useState(false);
-    const [username, setUsername] = useState('');
-    const [privateKey, setPrivateKey] = useState('');
+const checkAuthentication = async (callback: PropsCallback) : Promise<boolean> => {
+    const response = { success: false };
+    const privateKey = await SecureStorage.getItemAsync("privateKey");
+        
+    if(privateKey)
+        response.success = true;
+
+    if(callback)
+        callback(false);
+
+    return response.success;
 }
 
 type KeysProps = {
@@ -16,27 +23,44 @@ type KeysProps = {
     privateKey: string
 }
 
-const EncryptUserName = (userName: string) : string => {
-    const secret_key = Config.SECRET_KEY ?? "securit_key";
+const encryptUserName = (userName: string) : string => {
+    const secret_key = env.SECRET_KEY ?? "security_key";
     return CryptoJs.AES.encrypt(userName, secret_key).toString();
 }
 
-const DecryptUserName = (userName: string) : string => {
-    const secret_key = Config.SECRET_KEY ?? "securit_key";
+const decryptUserName = (userName: string) : string => {
+    const secret_key = env.SECRET_KEY ?? "security_key";
     return CryptoJs.AES.decrypt(userName, secret_key).toString();
 }
 
-const GenerateKeys = () : KeysProps => {
+const generateKeys = async () : Promise<KeysProps> => {
     
     const pairKeys = {
         publicKey: "",
         privateKey: ""
     };
 
-    Request.Get("/api/keyGen", { }, (response) => {
+    await Request.Post("/generate-keys", { }, (response) => {
         if(response.success) {
             pairKeys.publicKey = response.publicKey;
             pairKeys.privateKey = response.privateKey;
+        }
+        console.log(response);
+    })
+
+    return pairKeys;
+}
+
+const recoverKeys = async (privateKey: string) : Promise<KeysProps> => {
+
+    const pairKeys = {
+        publicKey: "",
+        privateKey: privateKey
+    };
+
+    await Request.Get("/recover-keys", { privateKey }, response => {
+        if(response.success) {
+            pairKeys.publicKey = response.publicKey;
         }
     })
 
@@ -48,19 +72,19 @@ type UserProps = {
     walletAddress: string
 }
 
-const RegisterUser = (props : UserProps) : boolean => {
+const registerUser = async (props : UserProps) : Promise<boolean> => {
     
     const result = { success: false };
 
     try {
-        const keys = GenerateKeys();
+        const keys = await generateKeys();
 
         const saveKeys = async () => {
             await SecureStorage.setItemAsync("publicKey", keys.publicKey);
             await SecureStorage.setItemAsync("privateKey", keys.privateKey);
         }
         
-        Request.Post("/user/new", { userName: props.userName, walletAddress: props.walletAddress, publicKey: keys.publicKey }, (response) => {
+        await Request.Post("/users/new", { userName: encryptUserName(props.userName), walletAddress: props.walletAddress, publicKey: keys.publicKey }, response => {
             if(response.success)
                 saveKeys();
 
@@ -77,28 +101,19 @@ type UserLoginProps = {
     privateKey: string
 }
 
-const LoginUser = (props: UserLoginProps) : boolean => {
+const loginUser = async (props: UserLoginProps) : Promise<boolean> => {
 
-    const pairKeys = {
-        privateKey: props.privateKey,
-        publicKey: ""
-    };
-
-    const result = { success: false };
-
-    const saveKeys = async () => {
-        await SecureStorage.setItemAsync("publicKey", pairKeys.publicKey);
-        await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
-    }
-
+    const result = { success: true };
     try {
-        Request.Post("/user/sigin", { privateKey: props.privateKey }, (response) => {
-            if(response.success) {
-                pairKeys.privateKey = response.publicKey;
-                saveKeys();
-            }
-            result.success = response.success;
-        });
+        const pairKeys = await recoverKeys(props.privateKey);
+
+        const saveKeys = async () => {
+            await SecureStorage.setItemAsync("publicKey", pairKeys.publicKey);
+            await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
+        }
+
+        await saveKeys();
+
     } catch {
         result.success = false;
     }
@@ -106,4 +121,4 @@ const LoginUser = (props: UserLoginProps) : boolean => {
     return result.success;
 }
 
-export {Authenticate, GenerateKeys, RegisterUser, LoginUser, EncryptUserName, DecryptUserName};
+export {checkAuthentication, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName};

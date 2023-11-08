@@ -1,10 +1,10 @@
 import { ButtonDefault } from '../components/Buttons';
 import WalletInput from '../components/WalletInput';
 import Header from '../components/Header';
-import styles from '../styledsheet/Styles';
+import styles from '../stylesheet/Styles';
 import { Text, View, Alert } from 'react-native';
-import { useState } from 'react';
-import { LoginUser } from '../services/Authenticate';
+import { useEffect, useState } from 'react';
+import { loginUser, checkAuthentication } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 
 const Login = ({ navigation } : any) => {
@@ -12,11 +12,11 @@ const Login = ({ navigation } : any) => {
     const [loading, setLoading] = useState(false);
     const [privateKey, setPrivateKey] = useState("");
 
-    const hendleLogin = () => {
-        if(!!privateKey) {
+    const handleLogin = async () => {
+        if(privateKey) {
             setLoading(true);
 
-            if(LoginUser({ privateKey: privateKey })) {
+            if(await loginUser({ privateKey: privateKey })) {
                 setLoading(false);
                 navigation.navigate("Home");
             } else {
@@ -27,6 +27,16 @@ const Login = ({ navigation } : any) => {
             Alert.alert("", "Please scan your private key or paste it into the field to access the app!")
         }
     }
+
+    useEffect(() => {
+        
+        checkAuthentication(setLoading).then((logged) => {
+            if(logged)
+                navigation.navigate("Home");
+            console.log(logged);
+        });
+
+    }, []);
 
     if(loading)
         return <Splashscreen/>
@@ -45,7 +55,7 @@ const Login = ({ navigation } : any) => {
             <WalletInput value={privateKey} setValue={setPrivateKey} />
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonDefault title="Sig In" onPress={hendleLogin} />
+                <ButtonDefault title="Sig In" onPress={handleLogin} />
             </View>
         </View>
     )

@@ -1,10 +1,10 @@
 import { ButtonDefault } from '../components/Buttons';
 import Header from '../components/Header';
 import WalletInput from '../components/WalletInput';
-import styles from '../styledsheet/Styles';
+import styles from '../stylesheet/Styles';
 import { Text, View, TextInput, Alert } from 'react-native';
-import { useState } from 'react';
-import { RegisterUser } from '../services/Authenticate';
+import { useState, useEffect } from 'react';
+import { registerUser, checkAuthentication } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 
 const Register = ({ navigation } : any) => {
@@ -13,11 +13,11 @@ const Register = ({ navigation } : any) => {
     const [userName, setUserName] = useState("");
     const [address, setAddress] = useState("");
 
-    const handleRegistration = () => {
+    const handleRegistration = async () => {
         if(!!userName && !!address) {
             setLoading(true);
 
-            if(RegisterUser({ userName: userName, walletAddress: address})) {
+            if(await registerUser({ userName: userName, walletAddress: address})) {
                 setLoading(false);
                 navigation.navigate("Home");
             } else {
@@ -27,6 +27,16 @@ const Register = ({ navigation } : any) => {
         } else 
             Alert.alert("", "Please fill in the required fields to complete your registration!");
     }
+
+    useEffect(() => {
+        
+        checkAuthentication(setLoading).then((logged) => {
+            if(logged)
+                navigation.navigate("Home");
+            console.log(logged);
+        });
+
+    }, []);
 
     if(loading)
         return <Splashscreen/>

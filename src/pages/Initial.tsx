@@ -1,30 +1,26 @@
 import React, { useEffect, useState} from 'react';
-import styles from '../styledsheet/Styles';
+import styles from '../stylesheet/Styles';
 import { View, Image, StyleSheet } from 'react-native';
 import { ButtonDefault, ButtonSuccess } from '../components/Buttons';
-import * as SecureStorage from 'expo-secure-store'
 import Splashscreen from '../components/SplashScreen';
+import { checkAuthentication } from '../services/Authenticate';
 
 const Initial = ({ navigation } : any) => {
 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const checkauthentication = async () => {
-            const privateKey = await SecureStorage.getItemAsync("privateKey");
-            if(privateKey)
+        
+        checkAuthentication(setLoading).then((logged) => {
+            if(logged)
                 navigation.navigate("Home");
+        });
 
-            setLoading(false);
-        }
-
-        checkauthentication();
     }, []);
 
     if(loading)
         return <Splashscreen />;
     
-
     return (
         <View style={styles.container}>
 
