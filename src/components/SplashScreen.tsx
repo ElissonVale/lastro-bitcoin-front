@@ -1,4 +1,5 @@
 import { StyleSheet, View, ActivityIndicator, Image } from "react-native";
+import env from "../../app.configs";
 
 const Splashscreen = () => {
     return (
@@ -12,7 +13,7 @@ const Splashscreen = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "#1D1D1D",
+      backgroundColor: env.COLORS.BLACK,
       justifyContent: 'center',
       alignItems: 'center',
     },

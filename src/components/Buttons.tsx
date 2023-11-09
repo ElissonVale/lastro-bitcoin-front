@@ -1,4 +1,5 @@
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import env from '../../app.configs';
 
 type Props = {
     title: string,
@@ -48,27 +49,27 @@ const ButtonHead = (params: Props) => {
 const styles = StyleSheet.create({
     button: {
         margin: 10,
-        backgroundColor: "transparent",
         paddingVertical: 18,       
-        borderRadius: 30, 
-        borderWidth: 1
+        borderRadius: 24, 
+        borderWidth: 0,
     },
     buttonSuccess: {
-        borderColor: "#27AE60",
+        backgroundColor: env.COLORS.GREEN,
     },
     buttonPrimary: {
-        borderColor: "#2D9CDB",
+        backgroundColor: env.COLORS.BLUE,
     },
     buttonDanger: {
-        borderColor: "#EB5757",
+        backgroundColor: env.COLORS.RED,
     },
     ButtonDefault: {
-        borderColor: "#FFF",
+        backgroundColor: env.COLORS.GRAY,
     },
     buttonText: {
-        color: "#FFF",
+        color: env.COLORS.WHITE,
+        padding: 0,
         fontSize: 14,
-        fontWeight: "400",
+        fontWeight: "500",
         textAlign: 'center'
     }
 });

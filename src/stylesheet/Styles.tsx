@@ -1,28 +1,29 @@
 import { StyleSheet } from 'react-native';
+import env from '../../app.configs';
 
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000000',
+        backgroundColor: env.COLORS.BLACK,
         alignItems: 'center',
         justifyContent: 'center',
       },
     title: {
-      color: "#fff"
+      color: env.COLORS.WHITE
     },
     input: {
       width: "90%",
-      color: "#FFF",
-      borderColor: "#FFF",
-      borderWidth: 1,
+      color: env.COLORS.WHITE,
+      borderColor: env.COLORS.WHITE,
+      backgroundColor: env.COLORS.DEFAULT,
       paddingHorizontal: 30,
       paddingVertical: 20,
-      borderRadius: 50,
+      borderRadius: 20,
       margin: 10
     },
     containerDescription: {
       width: "90%",
-      backgroundColor: "#BDBDBD",
+      backgroundColor: env.COLORS.GRAY,
       borderRadius: 10,
       padding: 20,
       marginTop: -50,
@@ -32,6 +33,6 @@ export default StyleSheet.create({
       fontSize: 14,
       fontWeight: "300",
       textAlign: "center",
-      color: "#333333"
+      color: "#fff"
     }
 });

@@ -1,5 +1,6 @@
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import env from '../../app.configs';
 
 type MenuApp = {
     addClick: () => void,
@@ -14,13 +15,13 @@ const MenuApp = (props: MenuApp) => {
                 <Ionicons name="ios-home" size={20} color="white" style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity> */}
             <TouchableOpacity style={[styles.menuButton, styles.left]} onPress={props.keyClick}>
-                <Ionicons name="key" size={20} color="white" style={{ textAlign: "center", padding: 18 }} />
+                <Ionicons name="key" size={20} color={env.COLORS.WHITE} style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>            
             <TouchableOpacity style={[styles.menuButton, styles.center]} onPress={props.addClick}>
-                <Ionicons name="add" size={28} color="white" style={{ textAlign: "center", padding: 18 }} />
+                <Ionicons name="add" size={28} color={env.COLORS.WHITE} style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>            
             <TouchableOpacity style={[styles.menuButton, styles.right]} onPress={props.countClick}>
-                <Ionicons name="person" size={20} color="white" style={{ textAlign: "center", padding: 18 }} />
+                <Ionicons name="person" size={20} color={env.COLORS.WHITE} style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
             {/* <TouchableOpacity style={[styles.menuButton, styles.rightOne]}>
                 <Ionicons name="person" size={20} color="white" style={{ textAlign: "center", padding: 18 }} />
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     },
     right: { right: 40 }, // { right: 80 },
     rightOne: { right: 10 },
-    center: { top: -45, left: "40%", right: "40%", backgroundColor: "#454545", borderColor: "black", borderWidth: 10, borderRadius: 50 },    
+    center: { top: -45, left: "40%", right: "40%", backgroundColor: env.COLORS.GRAY, borderColor: "black", borderWidth: 10, borderRadius: 50 },    
     leftOne: { left: 10 }, 
     left: { left: 40 } //{ left: 80 }
 });

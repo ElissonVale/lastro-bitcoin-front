@@ -1,4 +1,4 @@
-import { ButtonDefault } from '../components/Buttons';
+import { ButtonPrimary } from '../components/Buttons';
 import Header from '../components/Header';
 import WalletInput from '../components/WalletInput';
 import styles from '../stylesheet/Styles';
@@ -6,6 +6,7 @@ import { Text, View, TextInput, Alert, StyleSheet } from 'react-native';
 import { useState, useEffect } from 'react';
 import { registerUser, checkAuthentication, validateUserName } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
+import { StatusBar } from 'expo-status-bar';
 
 const Register = ({ navigation } : any) => {
 
@@ -69,6 +70,7 @@ const Register = ({ navigation } : any) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar hidden={true} />
 
             <Header title='Register' action={() => navigation.navigate('Initialize')}></Header>
 
@@ -87,7 +89,7 @@ const Register = ({ navigation } : any) => {
             { alertCode > 0 &&  <Text style={alerts.alert}>{alertMessages[alertCode]}</Text> }
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonDefault title="Register" onPress={handleRegistration} />
+                <ButtonPrimary title="REGISTER" onPress={handleRegistration} />
             </View>
         </View>
     )

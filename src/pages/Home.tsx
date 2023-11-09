@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Splashscreen from '../components/SplashScreen';
 import { checkAuthentication } from '../services/Authenticate';
 import MenuApp from '../components/MenuApp';
+import { StatusBar } from 'expo-status-bar';
+
 
 const Home = ({ navigation } : any) => {
     const [loading, setLoading] = useState(true);
@@ -42,14 +44,16 @@ const Home = ({ navigation } : any) => {
         return <Splashscreen/>
 
     return (
+       
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}
             />
         } >
-            
-        <View style={Styles.container}>
-            <Text>Home Page</Text>
+         <StatusBar hidden={true}/>
 
+        <View style={Styles.container}>
+            <Text style={{color: "#fff"}}>Home Page</Text>
+ 
             <MenuApp addClick={handleAdd} keyClick={handleKey} countClick={handleAccount}/>
         </View>
 

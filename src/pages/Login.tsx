@@ -1,4 +1,4 @@
-import { ButtonDefault } from '../components/Buttons';
+import { ButtonPrimary } from '../components/Buttons';
 import WalletInput from '../components/WalletInput';
 import Header from '../components/Header';
 import styles from '../stylesheet/Styles';
@@ -6,6 +6,7 @@ import { Text, View, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import { loginUser, checkAuthentication } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
+import { StatusBar } from 'expo-status-bar';
 
 const Login = ({ navigation } : any) => {
 
@@ -42,6 +43,7 @@ const Login = ({ navigation } : any) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar hidden={true} />
             
             <Header title='Sig In' action={() => navigation.navigate('Initialize')}></Header>
 
@@ -54,7 +56,7 @@ const Login = ({ navigation } : any) => {
             <WalletInput value={privateKey} setValue={setPrivateKey} />
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonDefault title="Sig In" onPress={handleLogin} />
+                <ButtonPrimary title="SIG IN" onPress={handleLogin} />
             </View>
         </View>
     )

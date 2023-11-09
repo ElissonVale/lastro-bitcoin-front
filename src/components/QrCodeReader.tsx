@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Ionicons } from '@expo/vector-icons';
+import env from '../../app.configs';
 
 type Props = {
   visible: boolean,
@@ -29,7 +30,7 @@ export default function QRCodeReaderModal(props: Props) {
   };
     
   return (
-    <Modal isVisible={props.visible} style={styles.modal}>
+    <Modal isVisible={props.visible} style={styles.modal} animationIn={"slideInUp"}>
       <View style={styles.container}>
 
         <TouchableOpacity onPress={() => { props.runClose(false); }} style={styles.closeButton}>
@@ -37,7 +38,7 @@ export default function QRCodeReaderModal(props: Props) {
         </TouchableOpacity>
 
         <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={styles.scanner}>
-          <View style={styles.framecode}></View>
+          <View style={styles.frameCode}></View>
         </BarCodeScanner>
       </View>
     </Modal>
@@ -46,44 +47,40 @@ export default function QRCodeReaderModal(props: Props) {
 
     
 const styles = StyleSheet.create({
-    container: {
+  container: {
+    flex: 1,
+    backgroundColor: env.COLORS.BLACK,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  scanner: {
       flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
-    scanText: {
-      fontSize: 18,
-      margin: 20,
-      textAlign: 'center',
-      color: "#fff"
-    },
-    scanner: {
-        flex: 1,
-        backgroundColor: "transparent",
-        width: "100%",
-        height: "100%",
-        borderRadius: 20
-    }, 
-    framecode: {
-        backgroundColor: "rgba(255, 255, 255, .2)",
-        width: 150,
-        height: 150,
-        borderRadius: 10,
-        position: "absolute",
-        top: "38%",
-        right: "28%"
-    },
-    modal: {
-      backgroundColor: "rgba(0,0,0,.8)"
-    },
-    closeButton: {
+      backgroundColor: "transparent",
+      width: "100%",
+      height: "100%",
+      borderRadius: 20
+  }, 
+  frameCode: {
+      backgroundColor: "rgba(255, 255, 255, .2)",
+      width: 150,
+      height: 150,
+      borderRadius: 10,
       position: "absolute",
-      bottom: 0,
-      right: "43%",
-      borderWidth: 1,
-      borderColor: "white",
-      padding: 0,
-      borderRadius: 30,
-      zIndex: 999
-    }
-  });
+      top: "38%",
+      right: "28%"
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: env.COLORS.BLACK
+  },
+  closeButton: {
+    position: "absolute",
+    bottom: 0,
+    right: "43%",
+    borderWidth: 1,
+    borderColor: "white",
+    padding: 0,
+    borderRadius: 30,
+    zIndex: 999
+  }
+});

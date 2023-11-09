@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import env from '../../app.configs';
 
 type Props = {
     title: string,
@@ -11,7 +12,7 @@ const Header = (props: Props) => {
     return (
         <View style={styles.head}>
              <TouchableOpacity style={styles.button} onPress={props.action}>
-                <Ionicons name="arrow-back" size={28} color="white" style={{ textAlign: "center", padding: 18 }} />
+                <Ionicons name="arrow-back" size={28} color={env.COLORS.WHITE} style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
         </View>
     );
@@ -19,24 +20,20 @@ const Header = (props: Props) => {
 
 
 const styles = StyleSheet.create({
-    title: {
-        color: "#FFF",
-        textAlign: "center",
-        padding: 24,
-        fontWeight: "bold"
-    },
     head: {
         width: "100%",
         position: "absolute",
-        padding: 10,
+        // marginHorizontal: 10,
+        // marginVertical: 18,
         top: 0
     },
     button: {
-        borderColor: "#FFF",
+        borderColor: env.COLORS.WHITE,
         position: "absolute",
-        left: 15,
-        top: 20,
+        left: 0,
+        top: 0,
         zIndex: 999,
+        marginHorizontal: 10
     }
 });
 
