@@ -19,6 +19,9 @@ const Register = ({ navigation } : any) => {
     const alertMessages = ["", "Username already in use!", "Please fill in the required fields to complete your registration!"];
 
     const handleRegistration = async () => {
+
+        await validateName(userName);
+
         if(!!userName && alertCode == 0) {
             setAlertCode(0);
             setLoading(true);
@@ -50,7 +53,7 @@ const Register = ({ navigation } : any) => {
                     else
                         setAlertCode(0);
                 });
-            }, 800);
+            }, 500);
 
             setSearchTimeOut(timeout);
         }
@@ -99,7 +102,7 @@ const alerts = StyleSheet.create({
     alert: {
         color: "#EB5757",
         margin: 10, 
-        backgroundColor: "rgba(0,0,0,.3)",
+        backgroundColor: "rgba(255,0,0,.2)",
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 15,

@@ -38,17 +38,20 @@ const decryptUserName = (userName: string) : string => {
 
 const generateKeys = async () : Promise<KeysProps> => {
     
-    const pairKeys = {
-        publicKey: "",
-        privateKey: ""
-    };
+    const pairKeys = { publicKey: "", privateKey: "" };
 
-    await Request.Post("/generate-keys", { }, (response) => {
-        if(response.success) {
-            pairKeys.publicKey = response.publicKey;
-            pairKeys.privateKey = response.privateKey;
-        }
-    })
+    try {
+        await Request.Post("/generate-keys", { }, (response) => {
+            console.log(response);
+            if(response.success) {
+                pairKeys.publicKey = response.publicKey;
+                pairKeys.privateKey = response.privateKey;
+            }
+        })
+    }
+    catch (exception) {  
+        console.log(exception); 
+    }
 
     return pairKeys;
 }
@@ -59,12 +62,15 @@ const recoverKeys = async (privateKey: string) : Promise<KeysProps> => {
         publicKey: "",
         privateKey: privateKey
     };
-
-    await Request.Get("/recover-keys", { privateKey }, response => {
-        if(response.success) {
-            pairKeys.publicKey = response.publicKey;
-        }
-    })
+    try {
+        await Request.Get("/recover-keys", { privateKey }, response => {
+            if(response.success) {
+                pairKeys.publicKey = response.publicKey;
+            }
+        })
+    } catch (exception) {
+        console.log(exception);
+    }
 
     return pairKeys;
 }
@@ -79,20 +85,22 @@ const registerUser = async (props : UserProps) : Promise<boolean> => {
     const result = { success: false };
 
     try {
-        const keys = await generateKeys();
+        const pairKeys = await generateKeys();
 
         const saveKeys = async () => {
-            await SecureStorage.setItemAsync("publicKey", keys.publicKey);
-            await SecureStorage.setItemAsync("privateKey", keys.privateKey);
+            await SecureStorage.setItemAsync("publicKey", pairKeys.publicKey);
+            await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
         }
-        
-        await Request.Post("/users/new", { userName: encryptUserName(props.userName), walletAddress: props.walletAddress, publicKey: keys.publicKey }, response => {
+
+        await Request.Post("/users/new", { userName: encryptUserName(props.userName), walletAddress: props.walletAddress, publicKey: pairKeys.publicKey }, response => {
             if(response.success)
                 saveKeys();
 
+            console.log(response)
             result.success = response.success;
         });
-    } catch {
+    } catch (exception) {
+        console.log(exception);
         result.success = false; 
     }
 
@@ -116,7 +124,8 @@ const loginUser = async (props: UserLoginProps) : Promise<boolean> => {
 
         await saveKeys();
 
-    } catch {
+    } catch(exception) {
+        console.log(exception);
         result.success = false;
     }
 
@@ -137,7 +146,8 @@ const deleteAccount = async () : Promise<boolean> => {
             }
             result.success = response.success;
         });
-    } catch {
+    } catch(exception) {
+        console.log(exception);
         result.success = false;
     }
 
@@ -147,11 +157,17 @@ const deleteAccount = async () : Promise<boolean> => {
 const validateUserName = async (userName: string) : Promise<boolean> => {
     const result = { success: true };
 
-    const userNameHash = encryptUserName(userName);
+    try {
+        const userNameHash = encryptUserName(userName);
 
-    await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
-        result.success = response.success;
-    });
+        await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
+            result.success = response.success;
+        });
+    } 
+    catch(exception) {
+        console.log(exception);
+        result.success = false;
+    }
 
     return result.success;
 }
