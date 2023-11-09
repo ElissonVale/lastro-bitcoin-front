@@ -24,13 +24,16 @@ type KeysProps = {
 }
 
 const encryptUserName = (userName: string) : string => {
-    const secret_key = env.SECRET_KEY ?? "security_key";
-    return CryptoJs.AES.encrypt(userName, secret_key).toString();
+    const options = {
+        iv: CryptoJs.enc.Utf8.parse(env.SECRET_VECTOR),
+    };
+    return CryptoJs.AES.encrypt(userName + env.SECRET_CIPHER, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString();
 }
 
 const decryptUserName = (userName: string) : string => {
-    const secret_key = env.SECRET_KEY ?? "security_key";
-    return CryptoJs.AES.decrypt(userName, secret_key).toString();
+    const options = { iv: CryptoJs.enc.Utf8.parse(env.SECRET_VECTOR) };
+    const decrypted = CryptoJs.AES.decrypt(userName, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString(CryptoJs.enc.Utf8);
+    return decrypted.replace(env.SECRET_CIPHER, "");
 }
 
 const generateKeys = async () : Promise<KeysProps> => {
@@ -45,7 +48,6 @@ const generateKeys = async () : Promise<KeysProps> => {
             pairKeys.publicKey = response.publicKey;
             pairKeys.privateKey = response.privateKey;
         }
-        console.log(response);
     })
 
     return pairKeys;
@@ -121,4 +123,37 @@ const loginUser = async (props: UserLoginProps) : Promise<boolean> => {
     return result.success;
 }
 
-export {checkAuthentication, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName};
+const deleteAccount = async () : Promise<boolean> => {
+    const result = { success: false };
+    const pairKeys = {
+        publicKey: await SecureStorage.getItemAsync("publicKey"),
+    }
+
+    try {
+        await Request.Post("/users/delete", { publicKey: pairKeys.publicKey }, response => {
+            if(response.success) {
+                SecureStorage.deleteItemAsync("publicKey");
+                SecureStorage.deleteItemAsync("privateKey");
+            }
+            result.success = response.success;
+        });
+    } catch {
+        result.success = false;
+    }
+
+    return result.success;
+}
+
+const validateUserName = async (userName: string) : Promise<boolean> => {
+    const result = { success: true };
+
+    const userNameHash = encryptUserName(userName);
+
+    await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
+        result.success = response.success;
+    });
+
+    return result.success;
+}
+
+export {checkAuthentication, validateUserName, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount};

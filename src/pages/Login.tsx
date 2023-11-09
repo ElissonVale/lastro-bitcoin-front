@@ -18,7 +18,7 @@ const Login = ({ navigation } : any) => {
 
             if(await loginUser({ privateKey: privateKey })) {
                 setLoading(false);
-                navigation.navigate("Home");
+                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
             } else {
                 setLoading(false);
                 Alert.alert("", "Oops, an unexpected error occurred while logging in, please verify and correctly enter your private key!")
@@ -32,8 +32,7 @@ const Login = ({ navigation } : any) => {
         
         checkAuthentication(setLoading).then((logged) => {
             if(logged)
-                navigation.navigate("Home");
-            console.log(logged);
+                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
         });
 
     }, []);

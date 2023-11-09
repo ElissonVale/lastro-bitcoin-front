@@ -2,38 +2,64 @@ import { ButtonDefault } from '../components/Buttons';
 import Header from '../components/Header';
 import WalletInput from '../components/WalletInput';
 import styles from '../stylesheet/Styles';
-import { Text, View, TextInput, Alert } from 'react-native';
+import { Text, View, TextInput, Alert, StyleSheet } from 'react-native';
 import { useState, useEffect } from 'react';
-import { registerUser, checkAuthentication } from '../services/Authenticate';
+import { registerUser, checkAuthentication, validateUserName } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 
 const Register = ({ navigation } : any) => {
 
+    const [searchTimeOut, setSearchTimeOut] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+    const [validUserName, setValidUserName] = useState(true);
     const [userName, setUserName] = useState("");
     const [address, setAddress] = useState("");
+    const [alertCode, setAlertCode] = useState(0);
+    const alertMessages = ["", "Username already in use!", "Please fill in the required fields to complete your registration!"];
 
     const handleRegistration = async () => {
-        if(!!userName && !!address) {
+        if(!!userName && alertCode == 0) {
+            setAlertCode(0);
             setLoading(true);
 
             if(await registerUser({ userName: userName, walletAddress: address})) {
                 setLoading(false);
-                navigation.navigate("Home");
+                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
             } else {
                 setLoading(false);
                 Alert.alert("", "Oops, we were unable to complete the registration. The issue has been reported, and we are investigating. Please try again later!");
             }
         } else 
-            Alert.alert("", "Please fill in the required fields to complete your registration!");
+            setAlertCode(2);
+    }
+
+    const validateName = async (name: string) => {
+
+        setUserName(name);
+
+        if(name && name.length > 4) {
+
+            clearTimeout(searchTimeOut);
+
+            const timeout = setTimeout(() => { 
+                validateUserName(name.trim()).then((isValid) => {
+                    setValidUserName(isValid);
+                    if(!isValid) 
+                        setAlertCode(1);
+                    else
+                        setAlertCode(0);
+                });
+            }, 800);
+
+            setSearchTimeOut(timeout);
+        }
     }
 
     useEffect(() => {
         
         checkAuthentication(setLoading).then((logged) => {
             if(logged)
-                navigation.navigate("Home");
-            console.log(logged);
+                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
         });
 
     }, []);
@@ -52,9 +78,13 @@ const Register = ({ navigation } : any) => {
                 </Text>
             </View>
 
-            <TextInput value={userName} onChangeText={setUserName} placeholder="User Name *" placeholderTextColor="#fff" style={styles.input}/>
+            <TextInput value={userName} 
+                onChangeText={validateName} placeholder="User Name *" placeholderTextColor="#8F8F8F" 
+                style={[styles.input, { borderColor: validUserName ? "#FFF" : "#EB5757" }]}/>
 
             <WalletInput value={address} setValue={setAddress} />
+
+            { alertCode > 0 &&  <Text style={alerts.alert}>{alertMessages[alertCode]}</Text> }
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
                 <ButtonDefault title="Register" onPress={handleRegistration} />
@@ -63,4 +93,14 @@ const Register = ({ navigation } : any) => {
     )
 }
 
+const alerts = StyleSheet.create({
+    alert: {
+        color: "#EB5757",
+        margin: 10, 
+        backgroundColor: "rgba(0,0,0,.3)",
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 15,
+    }
+});
 export default Register;

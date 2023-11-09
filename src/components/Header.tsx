@@ -13,7 +13,6 @@ const Header = (props: Props) => {
              <TouchableOpacity style={styles.button} onPress={props.action}>
                 <Ionicons name="arrow-back" size={28} color="white" style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
-            {/* <Text style={styles.title}> {props.title} </Text> */}
         </View>
     );
 }
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
         borderColor: "#FFF",
         position: "absolute",
         left: 15,
-        top: 32,
+        top: 20,
         zIndex: 999,
     }
 });

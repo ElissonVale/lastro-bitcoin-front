@@ -6,6 +6,9 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import HomePage from './pages/Home';
 
+import Account from './pages/root/Account';
+import KeyManager from './pages/root/KeyManager';
+
 const Stack = createStackNavigator();
 
 const Navigation = () => {
@@ -16,6 +19,9 @@ const Navigation = () => {
           <Stack.Screen name="Login" component={LoginPage} />
           <Stack.Screen name="Register" component={RegisterPage} />
           <Stack.Screen name="Home" component={HomePage} />
+
+          <Stack.Screen name="KeyManager" component={KeyManager} />
+          <Stack.Screen name="Account" component={Account} />
         </Stack.Navigator>
       </NavigationContainer>
     );

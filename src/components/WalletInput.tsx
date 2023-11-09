@@ -14,7 +14,7 @@ const WalletInput = (props: Props) => {
 
     return (
         <View style={styles.conatiner}>
-            <TextInput value={props.value} placeholderTextColor="#FFF" onChangeText={props.setValue} placeholder="Wallet Address"  style={styles.input}/>
+            <TextInput value={props.value} placeholderTextColor="#8F8F8F" onChangeText={props.setValue} placeholder="Wallet Address"  style={styles.input}/>
             <TouchableOpacity style={styles.button}  onPress={() => { setQrReader(true) }}>
                 <Ionicons name="qr-code" size={28} color="white" style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
