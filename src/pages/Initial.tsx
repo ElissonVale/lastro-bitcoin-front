@@ -31,7 +31,7 @@ const Initial = ({ navigation } : any) => {
             <Image style={styles_home.logo} source={require("../../assets/logo.png")} />
 
             <View style={{ position: "absolute", bottom: 25, left: 10, width: "45%", zIndex: 99 }}>
-                <ButtonPrimary title="SIG IN" onPress={() => navigation.navigate('Login')}/>                
+                <ButtonPrimary title="SIGN IN" onPress={() => navigation.navigate('Login')}/>                
             </View>
             <View style={{ position: "absolute", bottom: 25, right: 10, width: "45%", zIndex: 99 }}>
                 <ButtonDefault title="REGISTER" onPress={() => navigation.navigate('Register')} />

@@ -38,11 +38,10 @@ const decryptUserName = (userName: string) : string => {
 
 const generateKeys = async () : Promise<KeysProps> => {
     
-    const pairKeys = { publicKey: "", privateKey: "" };
+    const pairKeys: KeysProps = { publicKey: "", privateKey: "" };
 
     try {
         await Request.Post("/generate-keys", { }, (response) => {
-            console.log(response);
             if(response.success) {
                 pairKeys.publicKey = response.publicKey;
                 pairKeys.privateKey = response.privateKey;
@@ -63,7 +62,7 @@ const recoverKeys = async (privateKey: string) : Promise<KeysProps> => {
         privateKey: privateKey
     };
     try {
-        await Request.Get("/recover-keys", { privateKey }, response => {
+        await Request.Post("/recover-keys", { privateKey }, response => {
             if(response.success) {
                 pairKeys.publicKey = response.publicKey;
             }
@@ -96,7 +95,6 @@ const registerUser = async (props : UserProps) : Promise<boolean> => {
             if(response.success)
                 saveKeys();
 
-            console.log(response)
             result.success = response.success;
         });
     } catch (exception) {

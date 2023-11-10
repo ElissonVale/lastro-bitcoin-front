@@ -56,7 +56,7 @@ const Login = ({ navigation } : any) => {
             <WalletInput value={privateKey} setValue={setPrivateKey} />
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonPrimary title="SIG IN" onPress={handleLogin} />
+                <ButtonPrimary title="SIGN IN" onPress={handleLogin} />
             </View>
         </View>
     )
