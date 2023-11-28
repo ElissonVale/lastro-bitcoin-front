@@ -2,6 +2,7 @@ import * as CryptoJs from 'react-native-crypto-js'
 import * as SecureStorage from 'expo-secure-store'
 import Request from './Requests';
 import env from '../../app.configs';
+import RsaSigner from 'react-native-rsa-signer';
 
 type PropsCallback = (data: boolean) => void | undefined;
 
@@ -13,7 +14,7 @@ const checkAuthentication = async (callback: PropsCallback) : Promise<boolean> =
         response.success = true;
 
     if(callback)
-        callback(false);
+        callback(response.success);
 
     return response.success;
 }
@@ -39,6 +40,13 @@ const decryptUserName = (userName: string) : string => {
 const generateKeys = async () : Promise<KeysProps> => {
     
     const pairKeys: KeysProps = { publicKey: "", privateKey: "" };
+
+    RsaSigner.regenerateKey("photo image library bomberman bitles man paradiase").then(privateKey => {
+        let publicKey = RsaSigner.getPublicKey(privateKey);
+
+        console.log(`Public key: ${publicKey}`);
+        console.log(`Private key: ${privateKey}`);
+    });
 
     try {
         await Request.Post("/generate-keys", { }, (response) => {

@@ -25,6 +25,7 @@
     "react-native-modal": "^13.0.1",
     "react-native-permissions": "^3.10.1",
     "react-native-qrcode-scanner": "^1.5.5",
+    "react-native-rsa-signer": "^1.5.1",
     "yarn": "^1.22.19"
   },
   "devDependencies": {
