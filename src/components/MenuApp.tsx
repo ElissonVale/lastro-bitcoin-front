@@ -12,15 +12,15 @@ const MenuApp = ({ addClick, countClick, keyClick }: MenuApp) => {
     return (
         <View style={styles.menu}>
 
-            <ButtonIcon icon="home" size={20} buttonStyles={[styles.menuButton, styles.leftOne]} iconStyles={[{ textAlign: "center", padding: 18 }]} onPress={keyClick}/>
+            <ButtonIcon icon="home" size={20} buttonStyles={[styles.menuButton, styles.leftOne]} onPress={keyClick}/>
 
-            <ButtonIcon icon="key" size={20} buttonStyles={[styles.menuButton, styles.left]} iconStyles={[{ textAlign: "center", padding: 18 }]} onPress={keyClick}/>
+            <ButtonIcon icon="key" size={20} buttonStyles={[styles.menuButton, styles.left]} onPress={keyClick}/>
 
-            <ButtonIcon icon="add" size={28} buttonStyles={[styles.menuButton, styles.center]} iconStyles={[{ textAlign: "center", padding: 18 }]} onPress={addClick}/>
+            <ButtonIcon icon="git-compare" size={28} buttonStyles={[styles.menuButton, styles.center]} onPress={addClick}/>
 
-            <ButtonIcon icon="person" size={20} buttonStyles={[styles.menuButton, styles.right]} iconStyles={[{ textAlign: "center", padding: 18 }]} onPress={countClick}/>
+            <ButtonIcon icon="person" size={20} buttonStyles={[styles.menuButton, styles.right]} onPress={countClick}/>
 
-            <ButtonIcon icon="home" size={20} buttonStyles={[styles.menuButton, styles.rightOne]} iconStyles={[{ textAlign: "center", padding: 18 }]} onPress={keyClick}/>
+            <ButtonIcon icon="settings" size={20} buttonStyles={[styles.menuButton, styles.rightOne]} onPress={keyClick}/>
 
         </View>
     );

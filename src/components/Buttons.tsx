@@ -49,20 +49,24 @@ const ButtonHead = ({ title, onPress }: Props) => {
 
 type IconProps = {
     icon: any,
-    size: number | undefined,
-    iconStyles: Array<{}> | undefined,
+    size?: number | undefined,
+    iconStyle?: {} | undefined,
     buttonStyles: Array<{}> | undefined,
     onPress: () => void
 };
 
-const ButtonIcon = ({ icon, size, iconStyles, buttonStyles, onPress }: IconProps) => {
+const ButtonIcon = ({ icon, size, iconStyle, buttonStyles, onPress }: IconProps) => {
 
     size = size ? size : 20;
-    icon = icon ? icon : "add";
+    iconStyle = iconStyle ? iconStyle : { textAlign: "center", padding: 18 };
 
+    /**
+   * See Icon Explorer app
+   * {@link https://expo.github.io/vector-icons/}
+   */
     return (
         <TouchableOpacity style={buttonStyles} onPress={onPress}>
-            <Ionicons name={icon} size={size} color={env.COLORS.ICONS} style={iconStyles} />
+            <Ionicons name={icon} size={size} color={env.COLORS.ICONS} style={iconStyle} />
         </TouchableOpacity>
     );
 }
