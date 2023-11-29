@@ -22,9 +22,7 @@ const env = {
         DEFAULT: "#2D3138",
 
         ICONS: "#FFFFFF",
-        PRIMARY: "#000000",
-        SECONDARY: "#FFFFFF",
-        MENU: "#184149"
+        MENU: "#2D3138"
     }
 };
 

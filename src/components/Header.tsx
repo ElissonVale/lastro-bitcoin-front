@@ -17,8 +17,11 @@ const Header = ({ children }: Props) => {
 
 const styles = StyleSheet.create({
     head: {
+        zIndex: 1,
         width: "100%",
         position: "absolute",
+        // backgroundColor: env.COLORS.BLACK,
+        height: 62,
         top: 0,
     }
 });

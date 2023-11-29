@@ -33,6 +33,26 @@ export default StyleSheet.create({
       fontSize: 14,
       fontWeight: "300",
       textAlign: "center",
-      color: "#fff"
+      color: env.COLORS.WHITE
+    },
+    separator: {
+      width: "70%", 
+      height: 0, 
+      padding: 0, 
+      marginTop: 20, 
+      borderColor: env.COLORS.GRAY, 
+      backgroundColor: env.COLORS.GRAY, 
+      borderWidth: 2,
+      borderTopLeftRadius: 50,
+      borderTopRightRadius: 50
+    },
+    endPage: {
+        width: "30%", 
+        height: 0, 
+        padding: 0, 
+        marginTop: 20, 
+        borderColor: env.COLORS.GRAY, 
+        backgroundColor: env.COLORS.GRAY, 
+        borderWidth: 1
     }
 });

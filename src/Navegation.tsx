@@ -9,12 +9,14 @@ import HomePage from './pages/Home';
 import Account from './pages/root/Account';
 import KeyManager from './pages/root/KeyManager';
 
+import { Transaction } from './pages/bank/Transaction';
+
 const Stack = createStackNavigator();
 
 const Navigation = () => {
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }} initialRouteName="Initialize" >
+        <Stack.Navigator screenOptions={{ headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter }} initialRouteName="Initialize" >
           <Stack.Screen name="Initialize" component={InitialPage} />
           <Stack.Screen name="Login" component={LoginPage} />
           <Stack.Screen name="Register" component={RegisterPage} />
@@ -22,6 +24,9 @@ const Navigation = () => {
 
           <Stack.Screen name="KeyManager" component={KeyManager} />
           <Stack.Screen name="Account" component={Account} />
+
+          <Stack.Screen name="Transaction" component={Transaction} />
+
         </Stack.Navigator>
       </NavigationContainer>
     );

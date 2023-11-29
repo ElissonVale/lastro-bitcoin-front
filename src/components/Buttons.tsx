@@ -58,7 +58,7 @@ type IconProps = {
 const ButtonIcon = ({ icon, size, iconStyle, buttonStyles, onPress }: IconProps) => {
 
     size = size ? size : 20;
-    iconStyle = iconStyle ? iconStyle : { textAlign: "center", padding: 18 };
+    iconStyle = iconStyle ? iconStyle : { textAlign: "center", padding: 12 };
 
     /**
    * See Icon Explorer app

@@ -2,25 +2,32 @@ import { StyleSheet, View } from 'react-native';
 import { ButtonIcon } from '../components/Buttons'
 import env from '../../app.configs';
 
-type MenuApp = {
-    addClick: () => void,
-    countClick: () => void,
-    keyClick: () => void
-}
+const MenuApp = ({ navigation }: any) => {
 
-const MenuApp = ({ addClick, countClick, keyClick }: MenuApp) => {
+    const handleAccount = () => { 
+        navigation.navigate('Account');
+    }
+
+    const handleKey = () => { 
+        navigation.navigate('KeyManager');
+    }
+
+    const handleAdd = () => { 
+        // navigation.navigate('Add');
+    }
+
     return (
         <View style={styles.menu}>
 
-            <ButtonIcon icon="home" size={20} buttonStyles={[styles.menuButton, styles.leftOne]} onPress={keyClick}/>
+            <ButtonIcon icon="home" size={20} buttonStyles={[styles.menuButton, styles.leftOne]} onPress={handleKey}/>
 
-            <ButtonIcon icon="key" size={20} buttonStyles={[styles.menuButton, styles.left]} onPress={keyClick}/>
+            <ButtonIcon icon="key" size={20} buttonStyles={[styles.menuButton, styles.left]} onPress={handleKey}/>
 
-            <ButtonIcon icon="git-compare" size={28} buttonStyles={[styles.menuButton, styles.center]} onPress={addClick}/>
+            <ButtonIcon icon="git-compare" size={28} buttonStyles={[styles.menuButton, styles.center]} iconStyle={{ padding: 18 }} onPress={handleAdd}/>
 
-            <ButtonIcon icon="person" size={20} buttonStyles={[styles.menuButton, styles.right]} onPress={countClick}/>
+            <ButtonIcon icon="person" size={20} buttonStyles={[styles.menuButton, styles.right]} onPress={handleAccount}/>
 
-            <ButtonIcon icon="settings" size={20} buttonStyles={[styles.menuButton, styles.rightOne]} onPress={keyClick}/>
+            <ButtonIcon icon="settings" size={20} buttonStyles={[styles.menuButton, styles.rightOne]} onPress={handleAccount}/>
 
         </View>
     );
