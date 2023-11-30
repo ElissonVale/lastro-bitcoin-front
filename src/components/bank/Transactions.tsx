@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import env from "../../../app.configs";
 import { Ionicons } from "@expo/vector-icons";
 import { TransactionType } from "../../pages/bank/Transaction";
 import Styles from "../../stylesheet/Styles";
 
-
 type Props = {
+    tag?: "Sats" | "BTC" | "R$" | "$",
     navigation?: any | undefined,
     transactions: Array<TransactionType>
 }
 
-
-const Transactions = ({ navigation, transactions } : Props) => {
+const Transactions = ({ navigation, transactions, tag } : Props) => {
   
+    tag = tag ? tag : "Sats";
+
     const handleTransactionClick = (transaction: TransactionType) => {
         navigation.navigate("Transaction", { transaction });
     }
@@ -54,10 +54,11 @@ const Transactions = ({ navigation, transactions } : Props) => {
                                 </View>
                                 <View style={[styles.info, { width: "54%", left: "15%", top: -10 }]}>
                                     <Text style={{ color: env.COLORS.WHITE, paddingTop: 0 }}>{transaction.description}</Text>
-                                    <Text style={{ color: env.COLORS.WHITE, paddingTop: 18 }}>{transaction.date}</Text>
+                                    <Text style={{ color: env.COLORS.GRAY, paddingTop: 18 }}>{transaction.date}</Text>
                                 </View>
-                                <View style={[styles.info, { width: "30%", left: "72%", top: -68 }]}>
+                                <View style={[styles.info, { width: "30%", left: "72%", top: -68, alignItems: "center" }]}>
                                     <Text style={[styles.transaction_amount, { color: amount_color }]}>{transaction.amount}</Text>
+                                    <Text style={{ color: env.COLORS.GRAY }}>{tag}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -89,8 +90,6 @@ const styles = StyleSheet.create({
     info: { 
         top: 10,  
         margin: 0,
-        // borderWidth: 1,
-        // borderColor: "#fff",
         position: "relative", 
     },
     last_transaction_empty: {

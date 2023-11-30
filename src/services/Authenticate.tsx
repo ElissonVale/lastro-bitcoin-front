@@ -2,77 +2,77 @@ import * as CryptoJs from 'react-native-crypto-js'
 import * as SecureStorage from 'expo-secure-store'
 import Request from './Requests';
 import env from '../../app.configs';
-import RsaSigner from 'react-native-rsa-signer';
+import { PairKeys, hexToString, stringToHex } from './Encrypt'
+
 
 type PropsCallback = (data: boolean) => void | undefined;
 
-const checkAuthentication = async (callback: PropsCallback) : Promise<boolean> => {
+const checkAuthentication = async (callback: PropsCallback): Promise<boolean> => {
     const response = { success: false };
     const privateKey = await SecureStorage.getItemAsync("privateKey");
-        
-    if(privateKey)
+
+    if (privateKey)
         response.success = true;
 
-    if(callback)
+    if (callback)
         callback(response.success);
 
     return response.success;
 }
 
-type KeysProps = {
-    publicKey: string,
-    privateKey: string
-}
+const encryptUserName = (userName: string): string => {
 
-const encryptUserName = (userName: string) : string => {
     const options = {
         iv: CryptoJs.enc.Utf8.parse(env.SECRET_VECTOR),
     };
-    return CryptoJs.AES.encrypt(userName + env.SECRET_CIPHER, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString();
+
+    const userNameHash = CryptoJs.AES.encrypt(userName + env.SECRET_CIPHER, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString();
+
+    return userNameHash;
 }
 
-const decryptUserName = (userName: string) : string => {
+const decryptUserName = (userName: string): string => {
+
     const options = { iv: CryptoJs.enc.Utf8.parse(env.SECRET_VECTOR) };
+
     const decrypted = CryptoJs.AES.decrypt(userName, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString(CryptoJs.enc.Utf8);
+
     return decrypted.replace(env.SECRET_CIPHER, "");
 }
 
-const generateKeys = async () : Promise<KeysProps> => {
-    
-    const pairKeys: KeysProps = { publicKey: "", privateKey: "" };
+const generateKeys = async (): Promise<PairKeys> => {
 
-    RsaSigner.regenerateKey("photo image library bomberman bitles man paradiase").then(privateKey => {
-        let publicKey = RsaSigner.getPublicKey(privateKey);
+    const pairKeys: PairKeys = { publicKey: "", privateKey: "" };
 
-        console.log(`Public key: ${publicKey}`);
-        console.log(`Private key: ${privateKey}`);
-    });
+    const setPairKeys = ({ publicKey, privateKey }: PairKeys) => { 
+        pairKeys.privateKey = privateKey;
+        pairKeys.publicKey = publicKey;
+    };
 
     try {
         await Request.Post("/generate-keys", { }, (response) => {
             if(response.success) {
-                pairKeys.publicKey = response.publicKey;
-                pairKeys.privateKey = response.privateKey;
+                setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });
             }
         })
     }
-    catch (exception) {  
-        console.log(exception); 
+    catch (exception) {
+        console.log(exception);
     }
 
     return pairKeys;
 }
 
-const recoverKeys = async (privateKey: string) : Promise<KeysProps> => {
+const recoverKeys = async (privateKey: string): Promise<PairKeys> => {
 
-    const pairKeys = {
-        publicKey: "",
-        privateKey: privateKey
-    };
+    const pairKeys : PairKeys = { publicKey: "", privateKey };
+
+    const setPublicKey = (key: string)  => pairKeys.publicKey = key;
+
     try {
         await Request.Post("/recover-keys", { privateKey }, response => {
-            if(response.success) {
-                pairKeys.publicKey = response.publicKey;
+            if (response.success) {
+                setPublicKey(response.publicKey);
             }
         })
     } catch (exception) {
@@ -87,27 +87,28 @@ type UserProps = {
     walletAddress: string
 }
 
-const registerUser = async (props : UserProps) : Promise<boolean> => {
-    
+const registerUser = async ({ userName, walletAddress }: UserProps): Promise<boolean> => {
+
     const result = { success: false };
 
     try {
         const pairKeys = await generateKeys();
 
-        const saveKeys = async () => {
+        const saveKeys = async (userId: string) => {
+            await SecureStorage.setItemAsync("userId", userId);
+            await SecureStorage.setItemAsync("userName", userName);
             await SecureStorage.setItemAsync("publicKey", pairKeys.publicKey);
             await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
         }
 
-        await Request.Post("/users/new", { userName: encryptUserName(props.userName), walletAddress: props.walletAddress, publicKey: pairKeys.publicKey }, response => {
-            if(response.success)
-                saveKeys();
+        await Request.Post("/users/new", { userName: encryptUserName(userName), walletAddress, publicKey: pairKeys.publicKey }, response => {
+            if (response.success) 
+                saveKeys(response.user.id);
 
             result.success = response.success;
         });
     } catch (exception) {
-        console.log(exception);
-        result.success = false; 
+        result.success = false;
     }
 
     return result.success;
@@ -117,7 +118,7 @@ type UserLoginProps = {
     privateKey: string
 }
 
-const loginUser = async (props: UserLoginProps) : Promise<boolean> => {
+const loginUser = async (props: UserLoginProps): Promise<boolean> => {
 
     const result = { success: true };
     try {
@@ -130,7 +131,7 @@ const loginUser = async (props: UserLoginProps) : Promise<boolean> => {
 
         await saveKeys();
 
-    } catch(exception) {
+    } catch (exception) {
         console.log(exception);
         result.success = false;
     }
@@ -138,44 +139,50 @@ const loginUser = async (props: UserLoginProps) : Promise<boolean> => {
     return result.success;
 }
 
-const deleteAccount = async () : Promise<boolean> => {
+const deleteAccount = async (): Promise<boolean> => {
     const result = { success: false };
+
+    const clearUser = async () => {
+        await SecureStorage.deleteItemAsync("userId");
+        await SecureStorage.deleteItemAsync("userName");
+        await SecureStorage.deleteItemAsync("publicKey");
+        await SecureStorage.deleteItemAsync("privateKey");
+    }
+
     const pairKeys = {
         publicKey: await SecureStorage.getItemAsync("publicKey"),
     }
-    
+
     try {
+
         await Request.Post("/users/delete", { publicKey: pairKeys.publicKey }, response => {
-            if(response.success) {
-                SecureStorage.deleteItemAsync("publicKey");
-                SecureStorage.deleteItemAsync("privateKey");
-            }
+            if (response.success) 
+                clearUser();
+            
             result.success = response.success;
         });
-    } catch(exception) {
-        console.log(exception);
+    } catch (exception) {
         result.success = false;
     }
 
     return result.success;
 }
 
-const validateUserName = async (userName: string) : Promise<boolean> => {
+const userNameExists = async (userName: string): Promise<boolean> => {
     const result = { success: true };
 
     try {
         const userNameHash = encryptUserName(userName);
-
+        
         await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
             result.success = response.success;
         });
-    } 
-    catch(exception) {
-        console.log(exception);
+    }
+    catch (exception) {
         result.success = false;
     }
 
     return result.success;
 }
 
-export {checkAuthentication, validateUserName, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount};
+export { checkAuthentication, userNameExists, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount };

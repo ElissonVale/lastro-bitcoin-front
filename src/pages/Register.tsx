@@ -4,59 +4,45 @@ import WalletInput from '../components/WalletInput';
 import styles from '../stylesheet/Styles';
 import { Text, View, TextInput, Alert, StyleSheet } from 'react-native';
 import { useState, useEffect } from 'react';
-import { registerUser, checkAuthentication, validateUserName } from '../services/Authenticate';
+import { registerUser, checkAuthentication, userNameExists } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 import { StatusBar } from 'expo-status-bar';
 
 const Register = ({ navigation } : any) => {
 
-    const [searchTimeOut, setSearchTimeOut] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-    const [validUserName, setValidUserName] = useState(true);
     const [userName, setUserName] = useState("");
     const [address, setAddress] = useState("");
     const [alertCode, setAlertCode] = useState(0);
+
     const alertMessages = ["", "Username already in use!", "Please fill in the required fields to complete your registration!"];
 
     const handleRegistration = async () => {
 
-        await validateName(userName);
+        setLoading(true);
 
-        if(!!userName && alertCode == 0) {
-            setAlertCode(0);
-            setLoading(true);
+        if(userName.length < 5)
+            return setErrorRegister(2);
 
-            if(await registerUser({ userName: userName, walletAddress: address})) {
-                setLoading(false);
-                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
-            } else {
-                setLoading(false);
-                Alert.alert("", "Oops, we were unable to complete the registration. The issue has been reported, and we are investigating. Please try again later!");
-            }
-        } else 
-            setAlertCode(2);
+        if(await userNameExists(userName.trim()))
+            return setErrorRegister(1);
+
+        if(await registerUser({ userName: userName, walletAddress: address}))
+            navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
+        else 
+            Alert.alert("", "Oops, we were unable to complete the registration. The issue has been reported, and we are investigating. Please try again later!");
+        
+        setLoading(false);
     }
 
-    const validateName = async (name: string) => {
+    const setUserNameField = (userName: string) => {
+        setUserName(userName.trim());
+        setAlertCode(0);
+    }
 
-        setUserName(name);
-
-        if(name && name.length > 4) {
-
-            clearTimeout(searchTimeOut);
-
-            const timeout = setTimeout(() => { 
-                validateUserName(name.trim()).then((isValid) => {
-                    setValidUserName(isValid);
-                    if(!isValid) 
-                        setAlertCode(1);
-                    else
-                        setAlertCode(0);
-                });
-            }, 500);
-
-            setSearchTimeOut(timeout);
-        }
+    const setErrorRegister = (codeError: any = 0) => {
+        setAlertCode(codeError);
+        setLoading(false);        
     }
 
     useEffect(() => {
@@ -75,7 +61,9 @@ const Register = ({ navigation } : any) => {
         <View style={styles.container}>
             <StatusBar hidden={true} />
 
-            <Header title='Register' action={() => navigation.navigate('Initialize')}></Header>
+            <Header>
+                
+            </Header>
 
             <View style={styles.containerDescription}>
                 <Text style={styles.description}>
@@ -83,9 +71,7 @@ const Register = ({ navigation } : any) => {
                 </Text>
             </View>
 
-            <TextInput value={userName} 
-                onChangeText={validateName} placeholder="User Name *" placeholderTextColor="#8F8F8F" 
-                style={[styles.input, { borderColor: validUserName ? "#FFF" : "#EB5757" }]}/>
+            <TextInput value={userName} onChangeText={setUserNameField} placeholder="User Name *" placeholderTextColor="#8F8F8F" style={styles.input}/>
 
             <WalletInput value={address} setValue={setAddress} />
 
