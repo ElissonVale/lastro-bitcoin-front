@@ -1,12 +1,13 @@
-import { ButtonPrimary } from '../components/Buttons';
+import { ButtonIcon, ButtonPrimary } from '../components/Buttons';
 import Header from '../components/Header';
 import WalletInput from '../components/WalletInput';
 import styles from '../stylesheet/Styles';
-import { Text, View, TextInput, Alert, StyleSheet } from 'react-native';
-import { useState, useEffect } from 'react';
-import { registerUser, checkAuthentication, userNameExists } from '../services/Authenticate';
+import { Text, View, TextInput, Alert } from 'react-native';
+import { useState } from 'react';
+import { registerUser, userNameExists } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 import { StatusBar } from 'expo-status-bar';
+import Styles from '../stylesheet/Styles';
 
 const Register = ({ navigation } : any) => {
 
@@ -45,14 +46,9 @@ const Register = ({ navigation } : any) => {
         setLoading(false);        
     }
 
-    useEffect(() => {
-        
-        checkAuthentication(setLoading).then((logged) => {
-            if(logged)
-                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
-        });
-
-    }, []);
+    const lastPage = () => { 
+        navigation.navigate("Initialize");
+    }
 
     if(loading)
         return <Splashscreen/>
@@ -62,7 +58,7 @@ const Register = ({ navigation } : any) => {
             <StatusBar hidden={true} />
 
             <Header>
-                
+                <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
             </Header>
 
             <View style={styles.containerDescription}>
@@ -75,7 +71,7 @@ const Register = ({ navigation } : any) => {
 
             <WalletInput value={address} setValue={setAddress} />
 
-            { alertCode > 0 &&  <Text style={alerts.alert}>{alertMessages[alertCode]}</Text> }
+            { alertCode > 0 &&  <Text style={Styles.alert}>{alertMessages[alertCode]}</Text> }
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
                 <ButtonPrimary title="REGISTER" onPress={handleRegistration} />
@@ -84,14 +80,4 @@ const Register = ({ navigation } : any) => {
     )
 }
 
-const alerts = StyleSheet.create({
-    alert: {
-        color: "#EB5757",
-        margin: 10, 
-        backgroundColor: "rgba(255,0,0,.2)",
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 15,
-    }
-});
 export default Register;

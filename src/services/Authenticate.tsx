@@ -26,7 +26,7 @@ const encryptUserName = (userName: string): string => {
         iv: CryptoJs.enc.Utf8.parse(env.SECRET_VECTOR),
     };
 
-    const userNameHash = CryptoJs.AES.encrypt(userName + env.SECRET_CIPHER, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString();
+    const userNameHash = CryptoJs.AES.encrypt(userName, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString();
 
     return userNameHash;
 }
@@ -37,7 +37,7 @@ const decryptUserName = (userName: string): string => {
 
     const decrypted = CryptoJs.AES.decrypt(userName, CryptoJs.enc.Utf8.parse(env.SECRET_KEY), options).toString(CryptoJs.enc.Utf8);
 
-    return decrypted.replace(env.SECRET_CIPHER, "");
+    return decrypted;
 }
 
 const generateKeys = async (): Promise<PairKeys> => {
@@ -51,9 +51,8 @@ const generateKeys = async (): Promise<PairKeys> => {
 
     try {
         await Request.Post("/generate-keys", { }, (response) => {
-            if(response.success) {
-                setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });
-            }
+            if(response.success) 
+                setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });            
         })
     }
     catch (exception) {
@@ -101,9 +100,9 @@ const registerUser = async ({ userName, walletAddress }: UserProps): Promise<boo
             await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
         }
 
-        await Request.Post("/users/new", { userName: encryptUserName(userName), walletAddress, publicKey: pairKeys.publicKey }, response => {
+        await Request.Post("/users/new", { userName: encryptUserName(userName), walletAddress, publicKey: pairKeys.publicKey }, async response => {
             if (response.success) 
-                saveKeys(response.user.id);
+                await saveKeys(response.user.id);
 
             result.success = response.success;
         });
@@ -132,7 +131,6 @@ const loginUser = async (props: UserLoginProps): Promise<boolean> => {
         await saveKeys();
 
     } catch (exception) {
-        console.log(exception);
         result.success = false;
     }
 
@@ -155,12 +153,13 @@ const deleteAccount = async (): Promise<boolean> => {
 
     try {
 
-        await Request.Post("/users/delete", { publicKey: pairKeys.publicKey }, response => {
+        await Request.Post("/users/delete", { publicKey: pairKeys.publicKey }, async response => {
             if (response.success) 
-                clearUser();
+                await clearUser();
             
             result.success = response.success;
         });
+
     } catch (exception) {
         result.success = false;
     }

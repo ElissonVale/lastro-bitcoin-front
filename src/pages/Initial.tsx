@@ -12,11 +12,9 @@ const Initial = ({ navigation } : any) => {
 
     useEffect(() => {
         
-        checkAuthentication(() => {}).then((logged) => {
-            if(logged)
-                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
-            else
-                setLoading(false);
+        checkAuthentication(setLoading).then((logged) => {
+            if(logged) 
+                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });            
         });
 
     }, []);

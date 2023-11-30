@@ -53,6 +53,7 @@ const Home = ({ navigation } : any) => {
     }
 
     useEffect(() => { 
+        
         // Check authenticated user
         checkAuthentication(() => {}).then((logged) => {
             if(!logged)

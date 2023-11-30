@@ -54,5 +54,21 @@ export default StyleSheet.create({
         borderColor: env.COLORS.GRAY, 
         backgroundColor: env.COLORS.GRAY, 
         borderWidth: 1
+    }, 
+    returnButton: {
+        borderColor: env.COLORS.WHITE,
+        position: "absolute",
+        left: 0,
+        top: 0,
+        zIndex: 999,
+        marginHorizontal: 10
+    },
+    alert: {
+      color: "#EB5757",
+      margin: 10, 
+      backgroundColor: "rgba(255,0,0,.2)",
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      borderRadius: 15,
     }
 });

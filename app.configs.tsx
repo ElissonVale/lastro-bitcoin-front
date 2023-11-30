@@ -9,7 +9,6 @@ const env = {
     // CRYPTOGRAPH INFORMATION
     SECRET_KEY: local.default.SECRET_KEY,
     SECRET_VECTOR: local.default.SECRET_VECTOR,
-    SECRET_CIPHER: local.default.SECRET_CIPHER,
 
     // PALET OF COLORS
     COLORS: {

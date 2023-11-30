@@ -3,8 +3,9 @@ import env from "../../app.configs";
 import * as SecureStorage from 'expo-secure-store'
 
 const axiosCreateInstance = async () => { 
+    
+    const userId = await SecureStorage.getItemAsync("userId");
     const publicKey = await SecureStorage.getItemAsync("publicKey");
-    const userId = await SecureStorage.getItemAsync("publicKey");
 
     return axios.create({
         baseURL: env.API_URL,
@@ -26,7 +27,9 @@ const Request = {
         const response = await axiosInstance.post(pointer, data);
 
         if(response.status == 200)
-            callback(response.data);
+            await callback(response.data);
+        else
+            console.log(`Request Error ${response.status}`);   
     },
 
     Get: async (pointer: string, data: {} | undefined, callback: (data: any) => void) => {
@@ -38,7 +41,9 @@ const Request = {
         const response = await axiosInstance.get(pointer, data);
         
         if(response.status == 200)
-            callback(response.data);
+            await callback(response.data);
+        else
+            console.log(`Request Error ${response.status}`);        
     }
 }
 

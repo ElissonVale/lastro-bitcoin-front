@@ -1,4 +1,4 @@
-import { ButtonPrimary } from '../components/Buttons';
+import { ButtonIcon, ButtonPrimary } from '../components/Buttons';
 import WalletInput from '../components/WalletInput';
 import Header from '../components/Header';
 import styles from '../stylesheet/Styles';
@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { loginUser, checkAuthentication } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 import { StatusBar } from 'expo-status-bar';
+import Styles from '../stylesheet/Styles';
 
 const Login = ({ navigation } : any) => {
 
@@ -29,14 +30,9 @@ const Login = ({ navigation } : any) => {
         }
     }
 
-    useEffect(() => {
-        
-        checkAuthentication(setLoading).then((logged) => {
-            if(logged)
-                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
-        });
-
-    }, []);
+    const lastPage = () => { 
+        navigation.navigate("Initialize");
+    }
 
     if(loading)
         return <Splashscreen/>
@@ -45,7 +41,9 @@ const Login = ({ navigation } : any) => {
         <View style={styles.container}>
             <StatusBar hidden={true} />
             
-            <Header title='Sig In' action={() => navigation.navigate('Initialize')}></Header>
+            <Header>
+                <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
+            </Header>
 
             <View style={styles.containerDescription}>
                 <Text style={styles.description}>
