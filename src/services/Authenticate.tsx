@@ -1,8 +1,8 @@
-import * as CryptoJs from 'react-native-crypto-js'
+import CryptoJs from 'react-native-crypto-js'
 import * as SecureStorage from 'expo-secure-store'
-import Request from './Requests';
-import env from '../../app.configs';
-import { PairKeys, hexToString, stringToHex } from './Encrypt'
+import Request from './Requests'
+import env from '../../app.configs'
+import { PairKeys } from './Encrypt'
 
 
 type PropsCallback = (data: boolean) => void | undefined;
@@ -50,7 +50,7 @@ const generateKeys = async (): Promise<PairKeys> => {
     };
 
     try {
-        await Request.Post("/generate-keys", { }, (response) => {
+        await Request.Post("/generate-keys", {}, (response) => {
             if(response.success) 
                 setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });            
         })
@@ -70,9 +70,8 @@ const recoverKeys = async (privateKey: string): Promise<PairKeys> => {
 
     try {
         await Request.Post("/recover-keys", { privateKey }, response => {
-            if (response.success) {
+            if (response.success)
                 setPublicKey(response.publicKey);
-            }
         })
     } catch (exception) {
         console.log(exception);
@@ -81,16 +80,20 @@ const recoverKeys = async (privateKey: string): Promise<PairKeys> => {
     return pairKeys;
 }
 
-type UserProps = {
+type registerUserProps = {
     userName: string,
-    walletAddress: string
+    walletAddress: string,
+    notifyProgress: (message: string) => void
 }
 
-const registerUser = async ({ userName, walletAddress }: UserProps): Promise<boolean> => {
+const registerUser = async ({ userName, walletAddress, notifyProgress }: registerUserProps): Promise<boolean> => {
 
     const result = { success: false };
 
     try {
+
+        notifyProgress("Generating keys...");
+
         const pairKeys = await generateKeys();
 
         const saveKeys = async (userId: string) => {
@@ -100,13 +103,17 @@ const registerUser = async ({ userName, walletAddress }: UserProps): Promise<boo
             await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
         }
 
+        notifyProgress("Registering user...");
+
         await Request.Post("/users/new", { userName: encryptUserName(userName), walletAddress, publicKey: pairKeys.publicKey }, async response => {
             if (response.success) 
                 await saveKeys(response.user.id);
 
             result.success = response.success;
         });
-    } catch (exception) {
+
+    } 
+    catch (exception) {
         result.success = false;
     }
 
@@ -114,19 +121,25 @@ const registerUser = async ({ userName, walletAddress }: UserProps): Promise<boo
 }
 
 type UserLoginProps = {
-    privateKey: string
+    privateKey: string,
+    notifyProgress: (message: string) => void
 }
 
-const loginUser = async (props: UserLoginProps): Promise<boolean> => {
+const loginUser = async ({ privateKey, notifyProgress }: UserLoginProps): Promise<boolean> => {
 
     const result = { success: true };
-    try {
-        const pairKeys = await recoverKeys(props.privateKey);
+    try 
+    {
+        notifyProgress("Recovering pair keys...");
+
+        const pairKeys = await recoverKeys(privateKey);
 
         const saveKeys = async () => {
             await SecureStorage.setItemAsync("publicKey", pairKeys.publicKey);
             await SecureStorage.setItemAsync("privateKey", pairKeys.privateKey);
         }
+
+        notifyProgress("Saving keys...");
 
         await saveKeys();
 
@@ -137,7 +150,11 @@ const loginUser = async (props: UserLoginProps): Promise<boolean> => {
     return result.success;
 }
 
-const deleteAccount = async (): Promise<boolean> => {
+type deleteUserProps = {
+    notifyProgress: (message: string) => void
+}
+
+const deleteAccount = async ({ notifyProgress }: deleteUserProps): Promise<boolean> => {
     const result = { success: false };
 
     const clearUser = async () => {
@@ -147,15 +164,20 @@ const deleteAccount = async (): Promise<boolean> => {
         await SecureStorage.deleteItemAsync("privateKey");
     }
 
-    const pairKeys = {
+    const infoUser = {
+        userId: await SecureStorage.getItemAsync("userId"),
         publicKey: await SecureStorage.getItemAsync("publicKey"),
     }
     
-    try {
+    try 
+    {
+        notifyProgress("Deleting user informations...");
 
-        await Request.Post("/users/delete", { publicKey: pairKeys.publicKey }, async response => {
-            if (response.success) 
+        await Request.Post("/users/delete", { userId: infoUser.userId, publicKey: infoUser.publicKey }, async response => {
+            if (response.success) {
+                notifyProgress("Clearing session...");
                 await clearUser();
+            }
             
             result.success = response.success;
         });
@@ -167,12 +189,19 @@ const deleteAccount = async (): Promise<boolean> => {
     return result.success;
 }
 
-const userNameExists = async (userName: string): Promise<boolean> => {
+type userNameProps = {
+    userName: string,
+    notifyProgress: (message: string) => void
+};
+
+const userNameExists = async ({ userName, notifyProgress }: userNameProps): Promise<boolean> => {
     const result = { success: true };
 
     try {
         const userNameHash = encryptUserName(userName);
         
+        notifyProgress("Checking username...");
+
         await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
             result.success = response.success;
         });

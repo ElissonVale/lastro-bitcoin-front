@@ -10,6 +10,7 @@ import Splashscreen from "../../components/SplashScreen";
 const Account = ({ navigation }: any) => {
 
     const [loading, setLoading] = useState(true);
+    const [notifyLoading, setNotifyLoading] = useState<string>();
 
     const lastPage = () => { 
         navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
@@ -19,7 +20,7 @@ const Account = ({ navigation }: any) => {
         
         setLoading(true);
 
-        if(await deleteAccount())
+        if(await deleteAccount({ notifyProgress: setNotifyLoading }))
             navigation.reset({ index: 0, routes: [ { name: "Initialize" } ] });
         else
             setLoading(false);
@@ -32,7 +33,7 @@ const Account = ({ navigation }: any) => {
     }, []);
 
     if(loading)
-        return <Splashscreen/>
+        return <Splashscreen message={notifyLoading} />
 
     return (
         <View style={Styles.container}>

@@ -17,12 +17,16 @@ const Home = ({ navigation } : any) => {
 
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const [notifyLoading, setNotifyLoading] = useState<string>();
 
-    const [founds, setFounds] = useState<string>("0");
+    const [founds, setFunds] = useState<string>("0");
     
     const [transactions, setTransactions] = useState<Array<TransactionType>>([]);
 
     const handleTransactions = async () => {
+
+        setNotifyLoading("loading transactions...");
+
         let trans : Array<TransactionType> = [];
         while(trans.length < 5) {
             trans.push({
@@ -38,12 +42,13 @@ const Home = ({ navigation } : any) => {
     }
 
     const handleFounds = async () => {
+        setNotifyLoading("loading funds...");
         return (Math.random() * 10000).toLocaleString("pt-BR", { maximumFractionDigits: 2 }); //.toFixed(4);
     }
 
     const loadData = async () => {
         // load user informations
-        setFounds(await handleFounds());
+        setFunds(await handleFounds());
 
         // load transactions 
         setTransactions(await handleTransactions());
@@ -73,7 +78,7 @@ const Home = ({ navigation } : any) => {
     };
 
     if(loading)
-        return <Splashscreen/>
+        return <Splashscreen message={notifyLoading} />
 
     return (
         <>

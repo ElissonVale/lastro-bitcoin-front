@@ -1,47 +1,50 @@
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import env from '../../app.configs';
+import { StyleProp } from 'react-native';
+import { TextStyle } from 'react-native';
 
 type Props = {
     title: string,
+    style?: StyleProp<TextStyle>,
     onPress: () => void
 };
 
-const ButtonSuccess = ({ title, onPress }: Props) => {
+const ButtonSuccess = ({ title, style, onPress }: Props) => {
     return (
-        <TouchableOpacity style={[styles.button, styles.buttonSuccess]} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, styles.buttonSuccess, style]} onPress={onPress}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 }
 
-const ButtonPrimary = ({ title, onPress }: Props) => {
+const ButtonPrimary = ({ title, style, onPress }: Props) => {
     return (
-        <TouchableOpacity style={[styles.button, styles.buttonPrimary]} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, styles.buttonPrimary, style]} onPress={onPress}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 }
 
-const ButtonDanger = ({ title, onPress }: Props) => {
+const ButtonDanger = ({ title, style, onPress }: Props) => {
     return (
-        <TouchableOpacity style={[styles.button, styles.buttonDanger]} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, styles.buttonDanger, style]} onPress={onPress}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 }
 
-const ButtonDefault = ({ title, onPress }: Props) => {
+const ButtonDefault = ({ title, style, onPress }: Props) => {
     return (
-        <TouchableOpacity style={[styles.button, styles.ButtonDefault]} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, styles.ButtonDefault, style]} onPress={onPress}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 }
 
-const ButtonHead = ({ title, onPress }: Props) => {
+const ButtonHead = ({ title, style, onPress }: Props) => {
     return (
-        <TouchableOpacity style={[styles.button, styles.ButtonDefault]} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, styles.ButtonDefault, style]} onPress={onPress}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     )
@@ -75,8 +78,7 @@ const styles = StyleSheet.create({
     button: {
         margin: 10,
         paddingVertical: 18,
-        borderRadius: 24,
-        borderWidth: 0,
+        borderRadius: 28,
     },
     buttonSuccess: {
         backgroundColor: env.COLORS.GREEN,

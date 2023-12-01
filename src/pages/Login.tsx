@@ -3,8 +3,8 @@ import WalletInput from '../components/WalletInput';
 import Header from '../components/Header';
 import styles from '../stylesheet/Styles';
 import { Text, View, Alert } from 'react-native';
-import { useEffect, useState } from 'react';
-import { loginUser, checkAuthentication } from '../services/Authenticate';
+import { useState } from 'react';
+import { loginUser } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 import { StatusBar } from 'expo-status-bar';
 import Styles from '../stylesheet/Styles';
@@ -13,12 +13,13 @@ const Login = ({ navigation } : any) => {
 
     const [loading, setLoading] = useState(false);
     const [privateKey, setPrivateKey] = useState("");
+    const [notifyLoading, setNotifyLoading] = useState<string>();
 
     const handleLogin = async () => {
         if(privateKey) {
             setLoading(true);
 
-            if(await loginUser({ privateKey: privateKey })) {
+            if(await loginUser({ privateKey: privateKey, notifyProgress: setNotifyLoading })) {
                 setLoading(false);
                 navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
             } else {
@@ -35,7 +36,7 @@ const Login = ({ navigation } : any) => {
     }
 
     if(loading)
-        return <Splashscreen/>
+        return <Splashscreen message={notifyLoading} />
 
     return (
         <View style={styles.container}>

@@ -20,7 +20,7 @@ const Initial = ({ navigation } : any) => {
     }, []);
 
     if(loading)
-        return <Splashscreen />;
+        return <Splashscreen message='checking authentication...' />;
     
     return (
         <View style={styles.container}>

@@ -1,6 +1,5 @@
-import Modal from 'react-native-modal';
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Ionicons } from '@expo/vector-icons';
 import env from '../../app.configs';
@@ -30,15 +29,16 @@ export default function QRCodeReaderModal({ visible, setValue, runClose }: Props
   };
     
   return (
-    <Modal isVisible={visible} style={styles.modal} animationIn={"slideInUp"}>
-      <View style={styles.container} >
-
-        <TouchableOpacity onPress={() => { runClose(false); }} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="white" style={{ textAlign: "center", padding: 10 }} />
-        </TouchableOpacity>
-
-        <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={styles.scanner}>
+    <Modal visible={visible}  animationType="slide" statusBarTranslucent={true} transparent={true} onRequestClose={() => { runClose(false) }}>
+      <View style={styles.container}>
+        <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={[styles.scanner, {...StyleSheet.absoluteFillObject}]} >
+          
           <View style={styles.frameCode}></View>
+
+          <TouchableOpacity onPress={() => { runClose(false); }} style={styles.closeButton}>
+            <Ionicons name="close" size={24} color="white" style={{ textAlign: "center", padding: 10 }} />
+          </TouchableOpacity>
+
         </BarCodeScanner>
       </View>
     </Modal>
@@ -49,38 +49,23 @@ export default function QRCodeReaderModal({ visible, setValue, runClose }: Props
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: env.COLORS.BLACK,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  scanner: {
-      flex: 1,
-      backgroundColor: "transparent",
-      width: "100%",
-      height: "100%",
-      borderRadius: 20
-  }, 
-  frameCode: {
-      backgroundColor: "rgba(255, 255, 255, .2)",
-      width: 150,
-      height: 150,
-      borderRadius: 10,
-      position: "absolute",
-      top: "38%",
-      right: "28%"
-  },
-  modal: {
-    flex: 1,
     backgroundColor: env.COLORS.BLACK
   },
+  scanner: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  }, 
+  frameCode: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    backgroundColor: "rgba(255, 255, 255, .2)",
+  },
   closeButton: {
-    position: "absolute",
-    bottom: 0,
-    right: "43%",
     borderWidth: 1,
-    borderColor: "white",
-    padding: 0,
-    borderRadius: 30,
-    zIndex: 999
+    borderColor: env.COLORS.WHITE,
+    borderRadius: 50,
+    position: 'absolute',
+    bottom: 80
   }
 });
