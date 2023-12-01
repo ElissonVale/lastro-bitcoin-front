@@ -8,7 +8,7 @@ type typeMessage = "alert" | "error" | "success";
 type alertBoxProps = {
     title?: string,
     message: string,
-    type: typeMessage
+    type?: typeMessage
 }
 
 var showMessageFunction: (config: alertBoxProps) => void;
@@ -60,7 +60,7 @@ const MessageBox = () => {
 }
 
 export const showMessage = (config: alertBoxProps) => {
-    showMessageFunction(config);
+    setTimeout(() => { showMessageFunction(config) }, 100);
 }
 
 const styles = StyleSheet.create({
@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
         paddingVertical: 50,
         marginVertical: 30,
         marginHorizontal: 15,
-        color: env.COLORS.WHITE
+        color: env.COLORS.WHITE,
+        textAlign: 'center'
     }
 });
 

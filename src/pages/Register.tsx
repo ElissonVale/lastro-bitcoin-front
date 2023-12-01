@@ -4,7 +4,7 @@ import WalletInput from '../components/WalletInput';
 import styles from '../stylesheet/Styles';
 import { Text, View, TextInput } from 'react-native';
 import { useState } from 'react';
-import { registerUser, userNameExists } from '../services/Authenticate';
+import { registerUser } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 import { StatusBar } from 'expo-status-bar';
 import Styles from '../stylesheet/Styles';
@@ -27,14 +27,12 @@ const Register = ({ navigation } : any) => {
         if(userName.length < 5)
             return setErrorRegister(2);
 
-        if(await userNameExists({ userName: userName.trim(), notifyProgress: setNotifyLoading }))
-            return setErrorRegister(1);
-
-        if(await registerUser({ userName: userName, walletAddress: address, notifyProgress: setNotifyLoading }))
+        const response = await registerUser({ userName: userName, walletAddress: address, notifyProgress: setNotifyLoading });
+        if(response.success)
             navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
         else
-            showMessage({ type: "error", message: "Oops, we were unable to complete the registration. The issue has been reported, and we are investigating. Please try again later!"});
-        
+            showMessage({ message: response.message });
+                
         setLoading(false);
     }
 

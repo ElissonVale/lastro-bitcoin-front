@@ -29,7 +29,7 @@ const Request = {
         if(response.status == 200)
             await callback(response.data);
         else
-            console.log(`Request Error ${response.status}`);   
+            throw new Error(`Request Error ${response.status}`);   
     },
 
     Get: async (pointer: string, data: {} | undefined, callback: (data: any) => void) => {
@@ -43,7 +43,7 @@ const Request = {
         if(response.status == 200)
             await callback(response.data);
         else
-            console.log(`Request Error ${response.status}`);        
+            throw new Error(`Request Error ${response.status}`);     
     }
 }
 

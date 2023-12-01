@@ -3,9 +3,12 @@ import * as SecureStorage from 'expo-secure-store'
 import Request from './Requests'
 import env from '../../app.configs'
 import { PairKeys } from './Encrypt'
+import { AxiosError } from 'axios'
 
 
 type PropsCallback = (data: boolean) => void | undefined;
+
+type DefaultResponse = { success: boolean, message: string };
 
 const checkAuthentication = async (callback: PropsCallback): Promise<boolean> => {
     const response = { success: false };
@@ -49,15 +52,10 @@ const generateKeys = async (): Promise<PairKeys> => {
         pairKeys.publicKey = publicKey;
     };
 
-    try {
-        await Request.Post("/generate-keys", {}, (response) => {
-            if(response.success) 
-                setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });            
-        })
-    }
-    catch (exception) {
-        console.log(exception);
-    }
+    await Request.Post("/generate-keys", {}, (response) => {
+        if(response.success) 
+            setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });            
+    });
 
     return pairKeys;
 }
@@ -80,17 +78,39 @@ const recoverKeys = async (privateKey: string): Promise<PairKeys> => {
     return pairKeys;
 }
 
+type userNameProps = {
+    userName: string,
+    notifyProgress: (message: string) => void
+};
+
+const userNameExists = async ({ userName, notifyProgress }: userNameProps): Promise<boolean> => {
+    const result = { success: true };
+
+    const userNameHash = encryptUserName(userName);
+    
+    notifyProgress("Checking username...");
+
+    await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
+        result.success = response.success;
+    });
+
+    return result.success;
+}
+
 type registerUserProps = {
     userName: string,
     walletAddress: string,
     notifyProgress: (message: string) => void
 }
 
-const registerUser = async ({ userName, walletAddress, notifyProgress }: registerUserProps): Promise<boolean> => {
+const registerUser = async ({ userName, walletAddress, notifyProgress }: registerUserProps): Promise<DefaultResponse> => {
 
-    const result = { success: false };
+    const result : DefaultResponse = { success: false, message: "" };
 
-    try {
+    try 
+    {
+        if(await userNameExists({ userName, notifyProgress })) 
+            throw new Error("Username already in use!");
 
         notifyProgress("Generating keys...");
 
@@ -114,10 +134,11 @@ const registerUser = async ({ userName, walletAddress, notifyProgress }: registe
 
     } 
     catch (exception) {
-        result.success = false;
+        if(exception instanceof Error)
+            result.message = exception.message;
     }
 
-    return result.success;
+    return result;
 }
 
 type UserLoginProps = {
@@ -189,28 +210,4 @@ const deleteAccount = async ({ notifyProgress }: deleteUserProps): Promise<boole
     return result.success;
 }
 
-type userNameProps = {
-    userName: string,
-    notifyProgress: (message: string) => void
-};
-
-const userNameExists = async ({ userName, notifyProgress }: userNameProps): Promise<boolean> => {
-    const result = { success: true };
-
-    try {
-        const userNameHash = encryptUserName(userName);
-        
-        notifyProgress("Checking username...");
-
-        await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
-            result.success = response.success;
-        });
-    }
-    catch (exception) {
-        result.success = false;
-    }
-
-    return result.success;
-}
-
-export { checkAuthentication, userNameExists, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount };
+export { checkAuthentication, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount };
