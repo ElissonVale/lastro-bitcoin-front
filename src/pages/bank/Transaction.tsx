@@ -29,10 +29,9 @@ const Transaction = ({ route, navigation }: any) => {
             <Header>
                 <Text style={{ color: env.COLORS.WHITE, textAlign: "center" }}>Transaction #{transaction && transaction.id}</Text>
             </Header>
-            <View>
-
+            <View style={Styles.container}>
+                <Text style={{ color: "#FFF" }}>My transaction</Text>
             </View>
-
         </View>
     )
 }

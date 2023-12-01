@@ -150,7 +150,7 @@ const deleteAccount = async (): Promise<boolean> => {
     const pairKeys = {
         publicKey: await SecureStorage.getItemAsync("publicKey"),
     }
-
+    
     try {
 
         await Request.Post("/users/delete", { publicKey: pairKeys.publicKey }, async response => {

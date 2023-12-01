@@ -11,7 +11,7 @@ type Props = {
   runClose: (value: boolean) => void,
 }
 
-export default function QRCodeReaderModal(props: Props) {
+export default function QRCodeReaderModal({ visible, setValue, runClose }: Props) {
 
   const [hasPermission, setHasPermission] = useState(false);
   
@@ -25,15 +25,15 @@ export default function QRCodeReaderModal(props: Props) {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }: { type: any, data: any}) => {
-    props.runClose(false);
-    props.setValue(data); 
+    runClose(false);
+    setValue(data); 
   };
     
   return (
-    <Modal isVisible={props.visible} style={styles.modal} animationIn={"slideInUp"}>
-      <View style={styles.container}>
+    <Modal isVisible={visible} style={styles.modal} animationIn={"slideInUp"}>
+      <View style={styles.container} >
 
-        <TouchableOpacity onPress={() => { props.runClose(false); }} style={styles.closeButton}>
+        <TouchableOpacity onPress={() => { runClose(false); }} style={styles.closeButton}>
           <Ionicons name="close" size={24} color="white" style={{ textAlign: "center", padding: 10 }} />
         </TouchableOpacity>
 
