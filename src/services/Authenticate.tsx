@@ -3,7 +3,6 @@ import * as SecureStorage from 'expo-secure-store'
 import Request from './Requests'
 import env from '../../app.configs'
 import { PairKeys } from './Encrypt'
-import { AxiosError } from 'axios'
 
 
 type PropsCallback = (data: boolean) => void | undefined;
@@ -47,14 +46,14 @@ const generateKeys = async (): Promise<PairKeys> => {
 
     const pairKeys: PairKeys = { publicKey: "", privateKey: "" };
 
-    const setPairKeys = ({ publicKey, privateKey }: PairKeys) => { 
+    const setPairKeys = ({ publicKey, privateKey }: PairKeys) => {
         pairKeys.privateKey = privateKey;
         pairKeys.publicKey = publicKey;
     };
 
     await Request.Post("/generate-keys", {}, (response) => {
-        if(response.success) 
-            setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });            
+        if (response.success)
+            setPairKeys({ publicKey: response.publicKey, privateKey: response.privateKey });
     });
 
     return pairKeys;
@@ -62,9 +61,9 @@ const generateKeys = async (): Promise<PairKeys> => {
 
 const recoverKeys = async (privateKey: string): Promise<PairKeys> => {
 
-    const pairKeys : PairKeys = { publicKey: "", privateKey };
+    const pairKeys: PairKeys = { publicKey: "", privateKey };
 
-    const setPublicKey = (key: string)  => pairKeys.publicKey = key;
+    const setPublicKey = (key: string) => pairKeys.publicKey = key;
 
     try {
         await Request.Post("/recover-keys", { privateKey }, response => {
@@ -87,7 +86,7 @@ const userNameExists = async ({ userName, notifyProgress }: userNameProps): Prom
     const result = { success: true };
 
     const userNameHash = encryptUserName(userName);
-    
+
     notifyProgress("Checking username...");
 
     await Request.Post("/users/validate-name", { userName: userNameHash }, response => {
@@ -105,11 +104,10 @@ type registerUserProps = {
 
 const registerUser = async ({ userName, walletAddress, notifyProgress }: registerUserProps): Promise<DefaultResponse> => {
 
-    const result : DefaultResponse = { success: false, message: "" };
+    const result: DefaultResponse = { success: false, message: "" };
 
-    try 
-    {
-        if(await userNameExists({ userName, notifyProgress })) 
+    try {
+        if (await userNameExists({ userName, notifyProgress }))
             throw new Error("Username already in use!");
 
         notifyProgress("Generating keys...");
@@ -126,15 +124,15 @@ const registerUser = async ({ userName, walletAddress, notifyProgress }: registe
         notifyProgress("Registering user...");
 
         await Request.Post("/users/new", { userName: encryptUserName(userName), walletAddress, publicKey: pairKeys.publicKey }, async response => {
-            if (response.success) 
+            if (response.success)
                 await saveKeys(response.user.id);
 
             result.success = response.success;
         });
 
-    } 
+    }
     catch (exception) {
-        if(exception instanceof Error)
+        if (exception instanceof Error)
             result.message = exception.message;
     }
 
@@ -149,8 +147,7 @@ type UserLoginProps = {
 const loginUser = async ({ privateKey, notifyProgress }: UserLoginProps): Promise<boolean> => {
 
     const result = { success: true };
-    try 
-    {
+    try {
         notifyProgress("Recovering pair keys...");
 
         const pairKeys = await recoverKeys(privateKey);
@@ -189,9 +186,8 @@ const deleteAccount = async ({ notifyProgress }: deleteUserProps): Promise<boole
         userId: await SecureStorage.getItemAsync("userId"),
         publicKey: await SecureStorage.getItemAsync("publicKey"),
     }
-    
-    try 
-    {
+
+    try {
         notifyProgress("Deleting user informations...");
 
         await Request.Post("/users/delete", { userId: infoUser.userId, publicKey: infoUser.publicKey }, async response => {
@@ -199,7 +195,7 @@ const deleteAccount = async ({ notifyProgress }: deleteUserProps): Promise<boole
                 notifyProgress("Clearing session...");
                 await clearUser();
             }
-            
+
             result.success = response.success;
         });
 

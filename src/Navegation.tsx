@@ -8,29 +8,33 @@ import HomePage from './pages/Home';
 
 import Account from './pages/root/Account';
 import KeyManager from './pages/root/KeyManager';
+import TokenAccess from './pages/root/TokenAccess';
+import VerifyToken from './pages/root/VerifyToken';
 
 import { Transaction } from './pages/bank/Transaction';
 
 const Stack = createStackNavigator();
 
 const Navigation = () => {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter }} initialRouteName="Initialize" >
-          <Stack.Screen name="Initialize" component={InitialPage} />
-          <Stack.Screen name="Login" component={LoginPage} />
-          <Stack.Screen name="Register" component={RegisterPage} />
-          <Stack.Screen name="Home" component={HomePage} />
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter }} initialRouteName="Initialize" >
+        <Stack.Screen name="Initialize" component={InitialPage} />
+        <Stack.Screen name="Login" component={LoginPage} />
+        <Stack.Screen name="Register" component={RegisterPage} />
+        <Stack.Screen name="TokenAccess" component={TokenAccess} />
+        <Stack.Screen name="VerifyToken" component={VerifyToken} />
 
-          <Stack.Screen name="KeyManager" component={KeyManager} />
-          <Stack.Screen name="Account" component={Account} />
+        <Stack.Screen name="Home" component={HomePage} />
 
-          <Stack.Screen name="Transaction" component={Transaction} />
+        <Stack.Screen name="KeyManager" component={KeyManager} />
+        <Stack.Screen name="Account" component={Account} />
 
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+        <Stack.Screen name="Transaction" component={Transaction} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 
 export default Navigation;

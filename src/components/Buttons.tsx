@@ -1,4 +1,4 @@
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import env from '../../app.configs';
 import { StyleProp } from 'react-native';
@@ -6,46 +6,67 @@ import { TextStyle } from 'react-native';
 
 type Props = {
     title: string,
+    icon?: "add" | "add-circle" | "arrow-forward-circle" | "trash" | "bookmarks",
     style?: StyleProp<TextStyle>,
     onPress: () => void
 };
 
-const ButtonSuccess = ({ title, style, onPress }: Props) => {
+const ButtonSuccess = ({ title, style, icon, onPress }: Props) => {
+
     return (
         <TouchableOpacity style={[styles.button, styles.buttonSuccess, style]} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.buttonText}> {title} </Text>
+                {icon &&  <Ionicons name={icon} size={18} style={styles.icon} color={env.COLORS.ICONS} /> }
+            </View>
         </TouchableOpacity>
     );
 }
 
-const ButtonPrimary = ({ title, style, onPress }: Props) => {
+const ButtonPrimary = ({ title, style, icon, onPress }: Props) => {
+
     return (
         <TouchableOpacity style={[styles.button, styles.buttonPrimary, style]} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
+           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.buttonText}> {title} </Text>
+                {icon && <Ionicons name={icon} size={18} color={env.COLORS.ICONS} /> }
+            </View>       
         </TouchableOpacity>
     );
 }
 
-const ButtonDanger = ({ title, style, onPress }: Props) => {
+const ButtonDanger = ({ title, style, icon, onPress }: Props) => {
+
     return (
         <TouchableOpacity style={[styles.button, styles.buttonDanger, style]} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.buttonText}> {title} </Text>
+                {icon && <Ionicons name={icon} size={18} color={env.COLORS.ICONS} /> }
+            </View>
         </TouchableOpacity>
     );
 }
 
-const ButtonDefault = ({ title, style, onPress }: Props) => {
+const ButtonDefault = ({ title, style, icon, onPress }: Props) => {
+
     return (
         <TouchableOpacity style={[styles.button, styles.ButtonDefault, style]} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
+           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.buttonText}> {title} </Text>
+                {icon && <Ionicons name={icon} size={18} color={env.COLORS.ICONS} /> }
+            </View>
         </TouchableOpacity>
     );
 }
 
-const ButtonHead = ({ title, style, onPress }: Props) => {
+const ButtonHead = ({ title, style, icon, onPress }: Props) => {
+
     return (
         <TouchableOpacity style={[styles.button, styles.ButtonDefault, style]} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={styles.buttonText}> {title} </Text>
+                {icon && <Ionicons name={icon} size={18} color={env.COLORS.ICONS} /> }
+            </View>        
         </TouchableOpacity>
     )
 }
@@ -94,10 +115,13 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: env.COLORS.WHITE,
-        padding: 0,
         fontSize: 14,
         fontWeight: "500",
-        textAlign: 'center'
+        textAlign: 'center',
+        marginHorizontal: 10
+    },
+    icon: {
+        marginHorizontal: 10
     }
 });
 

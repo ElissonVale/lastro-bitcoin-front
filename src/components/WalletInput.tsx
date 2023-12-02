@@ -6,22 +6,23 @@ import env from "../../app.configs";
 
 type Props = {
     value: string | undefined,
+    placeHolder?: string,
     setValue: (data: string) => void
 }
 
-const WalletInput = (props: Props) => {
+const WalletInput = ({ placeHolder, value, setValue }: Props) => {
 
     const [qrReader, setQrReader] = useState(false);
 
     return (
         <View style={styles.container}>
-            <TextInput value={props.value} placeholderTextColor="#8F8F8F" onChangeText={props.setValue} placeholder="Wallet Address"  style={styles.input}/>
-            <TouchableOpacity style={styles.button}  onPress={() => { setQrReader(true) }}>
+            <TextInput value={value} placeholderTextColor="#8F8F8F" onChangeText={setValue} placeholder={placeHolder ?? "Wallet Address"} style={styles.input} />
+            <TouchableOpacity style={styles.button} onPress={() => { setQrReader(true) }}>
                 <Ionicons name="qr-code" size={24} color="white" style={{ textAlign: "center", padding: 18 }} />
             </TouchableOpacity>
 
-            <QRCodeReaderModal setValue={props.setValue} visible={qrReader} runClose={setQrReader}/>
-        </View>              
+            <QRCodeReaderModal setValue={setValue} visible={qrReader} runClose={setQrReader} />
+        </View>
     );
 }
 

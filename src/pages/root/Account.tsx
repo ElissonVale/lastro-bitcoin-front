@@ -44,7 +44,7 @@ const Account = ({ navigation }: any) => {
             </Header>
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonDefault title="Delete" onPress={handleDelete}/>
+                <ButtonDefault title="Delete" icon="trash" onPress={handleDelete}/>
             </View>
             
         </View>

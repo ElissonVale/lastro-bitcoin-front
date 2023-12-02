@@ -52,10 +52,10 @@ const Login = ({ navigation } : any) => {
                 </Text>
             </View>
 
-            <WalletInput value={privateKey} setValue={setPrivateKey} />
+            <WalletInput value={privateKey} setValue={setPrivateKey} placeHolder='Private Key*'/>
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonPrimary title="SIGN IN" onPress={handleLogin} />
+                <ButtonPrimary title="Sign In" icon="arrow-forward-circle" onPress={handleLogin} />
             </View>
         </View>
     )

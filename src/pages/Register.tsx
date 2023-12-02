@@ -7,10 +7,9 @@ import { useState } from 'react';
 import { registerUser } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
 import { StatusBar } from 'expo-status-bar';
-import Styles from '../stylesheet/Styles';
-import MessageBox, {showMessage} from '../components/MessageBox';
+import MessageBox, { showMessage } from '../components/MessageBox';
 
-const Register = ({ navigation } : any) => {
+const Register = ({ navigation }: any) => {
 
     const [notifyLoading, setNotifyLoading] = useState<string>();
     const [loading, setLoading] = useState(false);
@@ -24,15 +23,18 @@ const Register = ({ navigation } : any) => {
 
         setLoading(true);
 
-        if(userName.length < 5)
+        if (userName.length < 5)
             return setErrorRegister(2);
 
         const response = await registerUser({ userName: userName, walletAddress: address, notifyProgress: setNotifyLoading });
-        if(response.success)
-            navigation.reset({ index: 0, routes: [ { name: "Home" } ] });
+
+        if (response.success)
+            navigation.reset({ index: 0, routes: [{ name: "TokenAccess" }] });
+        else if (response.message == alertMessages[1])
+            setAlertCode(1);
         else
             showMessage({ message: response.message });
-                
+
         setLoading(false);
     }
 
@@ -43,14 +45,14 @@ const Register = ({ navigation } : any) => {
 
     const setErrorRegister = (codeError: any = 0) => {
         setAlertCode(codeError);
-        setLoading(false);        
+        setLoading(false);
     }
 
-    const lastPage = () => { 
+    const lastPage = () => {
         navigation.navigate("Initialize");
     }
 
-    if(loading)
+    if (loading)
         return <Splashscreen message={notifyLoading} />
 
     return (
@@ -59,23 +61,23 @@ const Register = ({ navigation } : any) => {
                 <StatusBar hidden={true} />
 
                 <Header>
-                    <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
+                    <ButtonIcon icon="arrow-back" size={28} buttonStyles={[styles.returnButton]} onPress={lastPage} />
                 </Header>
 
                 <View style={styles.containerDescription}>
                     <Text style={styles.description}>
-                    To register, all you need is a unique username, and a bitcoin address for withdrawals.
+                        To register, all you need is a unique username, and a bitcoin address for withdrawals.
                     </Text>
                 </View>
 
-                <TextInput value={userName} onChangeText={setUserNameField} placeholder="User Name *" placeholderTextColor="#8F8F8F" style={styles.input}/>
+                <TextInput value={userName} onChangeText={setUserNameField} placeholder="User Name *" placeholderTextColor="#8F8F8F" style={styles.input} />
 
                 <WalletInput value={address} setValue={setAddress} />
 
-                { alertCode > 0 &&  <Text style={Styles.alert}>{alertMessages[alertCode]}</Text> }
+                {alertCode > 0 && <Text style={styles.alert}>{alertMessages[alertCode]}</Text>}
 
                 <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                    <ButtonPrimary title="REGISTER" onPress={handleRegistration} />
+                    <ButtonPrimary title="Register" icon="bookmarks" onPress={handleRegistration} />
                 </View>
 
             </View>

@@ -14,7 +14,7 @@ const Initial = ({ navigation } : any) => {
         
         checkAuthentication(setLoading).then((logged) => {
             if(logged) 
-                navigation.reset({ index: 0, routes: [ { name: "Home" } ] });            
+                navigation.reset({ index: 0, routes: [ { name: "VerifyToken" } ] });            
         });
 
     }, []);
@@ -29,10 +29,10 @@ const Initial = ({ navigation } : any) => {
             <Image style={styles_home.logo} source={require("../../assets/logo.png")} />
 
             <View style={{ position: "absolute", bottom: 25, left: 10, width: "45%", zIndex: 99 }}>
-                <ButtonPrimary title="SIGN IN" onPress={() => navigation.navigate('Login')}/>                
+                <ButtonPrimary title="Sign In" icon="arrow-forward-circle" onPress={() => navigation.navigate('Login')}/>                
             </View>
             <View style={{ position: "absolute", bottom: 25, right: 10, width: "45%", zIndex: 99 }}>
-                <ButtonDefault title="REGISTER" onPress={() => navigation.navigate('Register')} />
+                <ButtonDefault title="Register" icon="bookmarks" onPress={() => navigation.navigate('Register')} />
             </View>
 
         </View>
