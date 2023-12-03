@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import env from "../../app.configs";
 import { ButtonDanger } from "./Buttons";
+import { StatusBar } from "expo-status-bar";
 
 type typeMessage = "alert" | "error" | "success";
 
@@ -45,8 +46,9 @@ const MessageBox = () => {
     }, [visible]);
 
     return (
-        <Modal animationType="slide" onRequestClose={handleClose} transparent={true} statusBarTranslucent={true} visible={visible}>
-            <View style={styles.box}>
+        <Modal animationType="slide" onRequestClose={handleClose} transparent={true}  visible={visible}>
+            <StatusBar hidden={true} />
+            <View style={[styles.box, {...StyleSheet.absoluteFillObject}]}>
 
                 <Text style={{ color: baseColor, fontSize: 62, fontWeight: 'bold'}}> { title ?? "Oops!" } </Text>
 

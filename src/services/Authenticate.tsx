@@ -9,6 +9,20 @@ type PropsCallback = (data: boolean) => void | undefined;
 
 type DefaultResponse = { success: boolean, message: string };
 
+const checkTokenSet = async (callback?: PropsCallback): Promise<boolean> => {
+    const response = { success: false };
+
+    const token = await SecureStorage.getItemAsync("tokenAccess");
+
+    if (!!token)
+        response.success = true;
+
+    if (callback)
+        callback(response.success);
+
+    return response.success;
+}
+
 const checkAuthentication = async (callback: PropsCallback): Promise<boolean> => {
     const response = { success: false };
     const privateKey = await SecureStorage.getItemAsync("privateKey");
@@ -180,6 +194,7 @@ const deleteAccount = async ({ notifyProgress }: deleteUserProps): Promise<boole
         await SecureStorage.deleteItemAsync("userName");
         await SecureStorage.deleteItemAsync("publicKey");
         await SecureStorage.deleteItemAsync("privateKey");
+        await SecureStorage.deleteItemAsync("tokenAccess");        
     }
 
     const infoUser = {
@@ -206,4 +221,4 @@ const deleteAccount = async ({ notifyProgress }: deleteUserProps): Promise<boole
     return result.success;
 }
 
-export { checkAuthentication, generateKeys, recoverKeys, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount };
+export { checkAuthentication, checkTokenSet, registerUser, loginUser, encryptUserName, decryptUserName, deleteAccount };

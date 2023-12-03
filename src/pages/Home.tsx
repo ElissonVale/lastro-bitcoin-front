@@ -17,7 +17,7 @@ const Home = ({ navigation } : any) => {
 
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
-    const [notifyLoading, setNotifyLoading] = useState<string>();
+    const [notifyLoading, setNotifyLoading] = useState<string>("");
 
     const [founds, setFunds] = useState<string>("0");
     
@@ -28,7 +28,7 @@ const Home = ({ navigation } : any) => {
         setNotifyLoading("loading transactions...");
 
         let trans : Array<TransactionType> = [];
-        while(trans.length < 5) {
+        while(trans.length < 50) {
             trans.push({
                 id: "ooer83-435ygd-345rf",
                 date: new Date().toLocaleString(),
@@ -57,24 +57,29 @@ const Home = ({ navigation } : any) => {
         setRefreshing(false);
     }
 
-    useEffect(() => { 
-        
+    const handleLoadData = async () => {
         // Check authenticated user
-        checkAuthentication(() => {}).then((logged) => {
+        await checkAuthentication(() => {}).then((logged) => {
             if(!logged)
                 navigation.reset({ index: 0, routes: [ { name: "Initialize" } ] });
         });
 
-        loadData();
-
         // Load data from application backend
+        await loadData().then();
+
         setLoading(false);
+    }
+
+    useEffect(() => { 
+
+        handleLoadData();
+       
     },[]);
 
-    const handleRefresh = () => { 
+    const handleRefresh = async () => { 
         setRefreshing(true);
 
-        loadData();
+        await loadData();
     };
 
     if(loading)

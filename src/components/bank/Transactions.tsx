@@ -49,14 +49,14 @@ const Transactions = ({ navigation, transactions, tag } : Props) => {
                     return (
                         <TouchableOpacity key={index} style={styles.container_transactions} onPress={() => { handleTransactionClick(transaction) }} >   
                             <View style={styles.container_transaction} >   
-                                <View style={[styles.info, { width: "12%", left: 0, top: "34%" }]}>
+                                <View style={[styles.info, { width: "12%" }]}>
                                     <Ionicons name="checkmark-done" size={30} color={env.COLORS.GREEN} />
                                 </View>
-                                <View style={[styles.info, { width: "54%", left: "15%", top: -10 }]}>
+                                <View style={[styles.info, { width: "54%" }]}>
                                     <Text style={{ color: env.COLORS.WHITE, paddingTop: 0 }}>{transaction.description}</Text>
                                     <Text style={{ color: env.COLORS.GRAY, paddingTop: 18 }}>{transaction.date}</Text>
                                 </View>
-                                <View style={[styles.info, { width: "30%", left: "72%", top: -68, alignItems: "center" }]}>
+                                <View style={[styles.info, { width: "30%", alignItems: "center" }]}>
                                     <Text style={[styles.transaction_amount, { color: amount_color }]}>{transaction.amount}</Text>
                                     <Text style={{ color: env.COLORS.GRAY }}>{tag}</Text>
                                 </View>
@@ -79,8 +79,10 @@ const styles = StyleSheet.create({
     },
     container_transaction: {
         margin: 5,
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
         backgroundColor: "rgba(255, 255, 255, .05)", 
+        flexDirection: 'row',
         borderRadius: 18
     }, 
     transaction_amount: {
@@ -88,9 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     info: { 
-        top: 10,  
-        margin: 0,
-        position: "relative", 
+        marginVertical: 10,
     },
     last_transaction_empty: {
         flex: 1,  

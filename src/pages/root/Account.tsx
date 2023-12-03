@@ -6,6 +6,7 @@ import { deleteAccount } from "../../services/Authenticate";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import Splashscreen from "../../components/SplashScreen";
+import MessageBox, { showMessage } from "../../components/MessageBox";
 
 const Account = ({ navigation }: any) => {
 
@@ -23,7 +24,8 @@ const Account = ({ navigation }: any) => {
         if(await deleteAccount({ notifyProgress: setNotifyLoading }))
             navigation.reset({ index: 0, routes: [ { name: "Initialize" } ] });
         else
-            setLoading(false);
+            showMessage({ message: "Sorry, ocurrer error during retry delete your account!" });
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -36,18 +38,21 @@ const Account = ({ navigation }: any) => {
         return <Splashscreen message={notifyLoading} />
 
     return (
-        <View style={Styles.container}>
-            <StatusBar hidden={true} />
+        <>
+            <View style={Styles.container}>
+                <StatusBar hidden={true} />
 
-            <Header>
-                <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
-            </Header>
+                <Header>
+                    <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
+                </Header>
 
-            <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonDefault title="Delete" icon="trash" onPress={handleDelete}/>
+                <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
+                    <ButtonDefault title="Delete" icon="trash" onPress={handleDelete}/>
+                </View>
+                
             </View>
-            
-        </View>
+            <MessageBox />
+        </>
     );
 }
 

@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Ionicons } from '@expo/vector-icons';
 import env from '../../app.configs';
+import MessageBox, { showMessage } from './MessageBox';
 
 type Props = {
   visible: boolean,
@@ -16,6 +17,10 @@ export default function QRCodeReaderModal({ visible, setValue, runClose }: Props
   
   const requestPermission = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync(); 
+
+      if(status !== 'granted')
+        showMessage({ message: "No have access the camera, please authorize for qr-code reader!" });
+
       setHasPermission(status === 'granted');
   }
 
@@ -27,21 +32,24 @@ export default function QRCodeReaderModal({ visible, setValue, runClose }: Props
     runClose(false);
     setValue(data); 
   };
-    
+
   return (
-    <Modal visible={visible}  animationType="slide" statusBarTranslucent={true} transparent={true} onRequestClose={() => { runClose(false) }}>
-      <View style={styles.container}>
-        <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={[styles.scanner, {...StyleSheet.absoluteFillObject}]} >
-          
-          <View style={styles.frameCode}></View>
+    <>
+      <Modal visible={visible}  animationType="slide" statusBarTranslucent={true} transparent={true} onRequestClose={() => { runClose(false) }}>
+        <View style={[styles.container, {...StyleSheet.absoluteFillObject}]}>
+          <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={[styles.scanner, {...StyleSheet.absoluteFillObject}]} >
+            
+            <View style={styles.frameCode}></View>
 
-          <TouchableOpacity onPress={() => { runClose(false); }} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="white" style={{ textAlign: "center", padding: 10 }} />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => { runClose(false); }} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color="white" style={{ textAlign: "center", padding: 10 }} />
+            </TouchableOpacity>
 
-        </BarCodeScanner>
-      </View>
-    </Modal>
+          </BarCodeScanner>
+        </View>
+      </Modal>
+      <MessageBox />
+    </>
   );
 }
 
@@ -49,6 +57,8 @@ export default function QRCodeReaderModal({ visible, setValue, runClose }: Props
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     backgroundColor: env.COLORS.BLACK
   },
   scanner: {
