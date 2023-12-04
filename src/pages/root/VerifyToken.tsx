@@ -1,6 +1,6 @@
 import { Text, TextInput, View } from "react-native";
 import styles from "../../stylesheet/Styles";
-import { ButtonSuccess } from "../../components/Buttons";
+import { ButtonPrimary } from "../../components/Buttons";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import * as SecureStorage from 'expo-secure-store'
@@ -65,7 +65,7 @@ const VerifyToken = ({ navigation }: any) => {
             {alertCode > 0 && <Text style={styles.alert}> {alertMessages[alertCode]} </Text>}
 
             <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                <ButtonSuccess title="Access" onPress={handleVerify} icon="arrow-forward-circle" />
+                <ButtonPrimary title="Access" onPress={handleVerify} icon="arrow-forward-circle" />
             </View>
         </View>
     );

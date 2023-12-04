@@ -9,30 +9,28 @@ import Splashscreen from "../../components/SplashScreen";
 
 const TokenAccess = ({ navigation }: any) => {
 
-    const [token, setToken] = useState("");
-    const [confirmToken, setConfirmToken] = useState("");
+    const [token, setToken] = useState<string>("");
+    const [confirmToken, setConfirmToken] = useState<string>("");
     const [alertCode, setAlertCode] = useState(0);
     const [loading, setLoading] = useState(true);
     const alertMessages = ["", "Please fill in the required fields!", "The token must contain 4 numeric digits!", "The tokens do not match!"];
-
 
     const handleSetToken = async () => {
 
         setLoading(true);
 
-        if (token.length < 4 || confirmToken.length < 4) 
+        if (!!!token || !!!confirmToken) 
             setAlertCode(1);
         else if (token.length < 4 || confirmToken.length < 4)
             setAlertCode(2);
-        else if (token != confirmToken)
+        else if (token !== confirmToken)
             setAlertCode(3);
-
-        if(alertCode > 0)
-            return setLoading(false);
-
-        await SecureStorage.setItemAsync("tokenAccess", token);
-
-        navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+        else {
+            await SecureStorage.setItemAsync("tokenAccess", token);
+            navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+        }
+        
+        setLoading(false);
     }
 
     useEffect(() => {
