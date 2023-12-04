@@ -77,7 +77,7 @@ const Register = ({ navigation }: any) => {
                 {alertCode > 0 && <Text style={styles.alert}>{alertMessages[alertCode]}</Text>}
 
                 <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
-                    <ButtonPrimary title="Register" icon="bookmarks" onPress={handleRegistration} />
+                    <ButtonPrimary title="Register" icon="open" onPress={handleRegistration} />
                 </View>
 
             </View>

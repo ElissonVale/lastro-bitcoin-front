@@ -32,7 +32,7 @@ const Initial = ({ navigation } : any) => {
                 <ButtonPrimary title="Sign In" icon="arrow-forward-circle" onPress={() => navigation.navigate('Login')}/>                
             </View>
             <View style={{ position: "absolute", bottom: 25, right: 10, width: "45%", zIndex: 99 }}>
-                <ButtonDefault title="Register" icon="bookmarks" onPress={() => navigation.navigate('Register')} />
+                <ButtonDefault title="Register" icon="duplicate" onPress={() => navigation.navigate('Register')} />
             </View>
 
         </View>

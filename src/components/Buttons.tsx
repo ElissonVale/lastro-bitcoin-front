@@ -6,7 +6,7 @@ import { TextStyle } from 'react-native';
 
 type Props = {
     title: string,
-    icon?: "add" | "add-circle" | "arrow-forward-circle" | "trash" | "bookmarks",
+    icon?: "add" | "add-circle" | "arrow-forward-circle" | "trash" | "bookmarks" | "clipboard" | "duplicate" | "open",
     style?: StyleProp<TextStyle>,
     onPress: () => void
 };
