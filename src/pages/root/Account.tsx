@@ -40,8 +40,7 @@ const Account = ({ navigation }: any) => {
     return (
         <>
             <View style={Styles.container}>
-                <StatusBar hidden={true} />
-
+                
                 <Header>
                     <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
                 </Header>

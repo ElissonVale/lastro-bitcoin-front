@@ -96,8 +96,6 @@ const Home = ({ navigation } : any) => {
 
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} /> } >
                
-                <StatusBar hidden={true}/>
-
                 <View style={Styles.container}>
 
                     {/* Inormation founds */}

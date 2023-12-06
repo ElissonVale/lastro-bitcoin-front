@@ -43,8 +43,6 @@ const TokenAccess = ({ navigation }: any) => {
     return (
         <View style={styles.container}>
 
-            <StatusBar hidden={true} />
-
             <View style={styles.containerDescription}>
                 <Text style={styles.description}>
                     Set a security token to access the app and confirm transactions. The token must contain only numbers.

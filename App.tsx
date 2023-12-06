@@ -1,8 +1,12 @@
+import { StatusBar } from 'expo-status-bar';
 import Navigation from './src/Navegation';
 
 export default function App() {
   return (
-    <Navigation></Navigation>
+    <>
+      <StatusBar translucent hidden={true} backgroundColor='transparent'/>
+      <Navigation></Navigation>
+    </>
   );
 }
 

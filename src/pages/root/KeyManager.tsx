@@ -13,8 +13,6 @@ const KeyManager = ({ navigation }: any) => {
 
     return (
         <View style={Styles.container}>
-            <StatusBar hidden={true} />
-
              <Header>
                 <ButtonIcon icon="arrow-back" size={28} buttonStyles={[styles.header_last_button]} onPress={lastPage} />
              </Header>

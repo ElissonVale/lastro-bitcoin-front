@@ -24,7 +24,6 @@ const Initial = ({ navigation } : any) => {
     
     return (
         <View style={styles.container}>
-            <StatusBar hidden={true} />
 
             <Image style={styles_home.logo} source={require("../../assets/logo.png")} />
 

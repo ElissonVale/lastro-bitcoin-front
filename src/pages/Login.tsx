@@ -54,8 +54,6 @@ const Login = ({ navigation } : any) => {
     return (
         <>
         <View style={styles.container}>
-            <StatusBar hidden={true} />
-            
             <Header>
                 <ButtonIcon icon="arrow-back" size={28} buttonStyles={[Styles.returnButton]} onPress={lastPage} />
             </Header>
@@ -70,7 +68,7 @@ const Login = ({ navigation } : any) => {
 
             {alertCode > 0 && <Text style={styles.alert}>{alertMessages[alertCode]}</Text>}
 
-            <View style={{ position: "absolute", bottom: 25, width: "45%" }}>
+            <View style={{ position: "absolute", bottom: 25, width: "50%" }}>
                 <ButtonPrimary title="Sign In" icon="arrow-forward-circle" onPress={handleLogin} />
             </View>
         </View>

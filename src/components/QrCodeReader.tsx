@@ -35,7 +35,9 @@ export default function QRCodeReaderModal({ visible, setValue, runClose }: Props
 
   return (
     <>
-      <Modal visible={visible}  animationType="slide" statusBarTranslucent={true} transparent={true} onRequestClose={() => { runClose(false) }}>
+      <Modal visible={visible}  animationType="slide" transparent={true} onRequestClose={() => { runClose(false) }}
+        style={{ backgroundColor: "transparent", padding: 0 }}
+      >
         <View style={[styles.container, {...StyleSheet.absoluteFillObject}]}>
           <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={[styles.scanner, {...StyleSheet.absoluteFillObject}]} >
             
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    backgroundColor: env.COLORS.BLACK
+    backgroundColor: env.COLORS.BLACK,
   },
   scanner: {
     justifyContent: 'center',

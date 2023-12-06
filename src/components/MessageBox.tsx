@@ -47,7 +47,6 @@ const MessageBox = () => {
 
     return (
         <Modal animationType="slide" onRequestClose={handleClose} transparent={true}  visible={visible}>
-            <StatusBar hidden={true} />
             <View style={[styles.box, {...StyleSheet.absoluteFillObject}]}>
 
                 <Text style={{ color: baseColor, fontSize: 62, fontWeight: 'bold'}}> { title ?? "Oops!" } </Text>
