@@ -1,5 +1,4 @@
 import { View, StyleSheet } from "react-native";
-import env from '../../app.configs';
 
 type Props = {
     children: any
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
         zIndex: 1,
         width: "100%",
         position: "absolute",
-        // backgroundColor: env.COLORS.BLACK,
         height: 62,
         top: 0,
     }

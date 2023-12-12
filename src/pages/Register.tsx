@@ -6,7 +6,6 @@ import { Text, View, TextInput } from 'react-native';
 import { useState } from 'react';
 import { registerUser } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
-import { StatusBar } from 'expo-status-bar';
 import MessageBox, { showMessage } from '../components/MessageBox';
 
 const Register = ({ navigation }: any) => {

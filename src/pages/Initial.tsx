@@ -3,8 +3,7 @@ import styles from '../stylesheet/Styles';
 import { View, Image, StyleSheet } from 'react-native';
 import { ButtonDefault, ButtonPrimary } from '../components/Buttons';
 import Splashscreen from '../components/SplashScreen';
-import { checkAuthentication, checkTokenSet } from '../services/Authenticate';
-import { StatusBar } from 'expo-status-bar';
+import { checkAuthentication } from '../services/Authenticate';
 
 const Initial = ({ navigation } : any) => {
 

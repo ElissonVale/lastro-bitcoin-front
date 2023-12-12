@@ -2,11 +2,10 @@ import { ButtonIcon, ButtonPrimary } from '../components/Buttons';
 import WalletInput from '../components/WalletInput';
 import Header from '../components/Header';
 import styles from '../stylesheet/Styles';
-import { Text, View, Alert } from 'react-native';
+import { Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { loginUser } from '../services/Authenticate';
 import Splashscreen from '../components/SplashScreen';
-import { StatusBar } from 'expo-status-bar';
 import Styles from '../stylesheet/Styles';
 import MessageBox, { showMessage } from '../components/MessageBox';
 

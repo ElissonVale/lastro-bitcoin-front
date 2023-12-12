@@ -3,7 +3,6 @@ import Styles from "../../stylesheet/Styles";
 import Header from "../../components/Header";
 import { ButtonDefault, ButtonIcon } from "../../components/Buttons";
 import { deleteAccount } from "../../services/Authenticate";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import Splashscreen from "../../components/SplashScreen";
 import MessageBox, { showMessage } from "../../components/MessageBox";

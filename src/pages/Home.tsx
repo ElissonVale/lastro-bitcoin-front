@@ -1,10 +1,9 @@
-import { Text, View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
+import { View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import Styles from '../stylesheet/Styles';
 import { useEffect, useState } from 'react';
 import Splashscreen from '../components/SplashScreen';
 import { checkAuthentication } from '../services/Authenticate';
 import MenuApp from '../components/MenuApp';
-import { StatusBar } from 'expo-status-bar';
 import Header from '../components/Header';
 import { ButtonIcon } from '../components/Buttons';
 import env from '../../app.configs';

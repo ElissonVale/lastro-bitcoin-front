@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import Styles from "../../stylesheet/Styles";
 import Header from "../../components/Header";
-import { StatusBar } from "expo-status-bar";
 import env from "../../../app.configs";
 import { ButtonIcon } from "../../components/Buttons";
 

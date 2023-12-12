@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import * as SecureStorage from 'expo-secure-store'
 import styles from "../../stylesheet/Styles";
-import { StatusBar } from "expo-status-bar";
 import { ButtonPrimary } from "../../components/Buttons";
 import Splashscreen from "../../components/SplashScreen";
 

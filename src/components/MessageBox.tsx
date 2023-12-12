@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import env from "../../app.configs";
 import { ButtonDanger } from "./Buttons";
-import { StatusBar } from "expo-status-bar";
 
 type typeMessage = "alert" | "error" | "success";
 
