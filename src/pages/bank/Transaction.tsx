@@ -14,7 +14,7 @@ type TransactionType = {
     description?: string | undefined,
 }
 
-const Transaction = ({ route, navigation }: any) => {
+const Transaction = ({ route }: any) => {
     
     const [transaction, setTransaction] = useState<TransactionType>();
 
