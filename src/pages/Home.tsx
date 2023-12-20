@@ -1,4 +1,4 @@
-import { View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
+import { View, RefreshControl, StyleSheet } from 'react-native';
 import Styles from '../stylesheet/Styles';
 import { useEffect, useState } from 'react';
 import Splashscreen from '../components/SplashScreen';
@@ -10,7 +10,6 @@ import env from '../../app.configs';
 import Transactions from '../components/bank/Transactions';
 import { TransactionType } from './bank/Transaction';
 import Founds from '../components/bank/Founds';
-
 
 const Home = ({ navigation } : any) => {
 
@@ -27,11 +26,12 @@ const Home = ({ navigation } : any) => {
         setNotifyLoading("loading transactions...");
 
         let trans : Array<TransactionType> = [];
-        while(trans.length < 50) {
+
+        while(trans.length < 2) {
             trans.push({
                 id: "ooer83-435ygd-345rf",
                 date: new Date().toLocaleString(),
-                amount: (Math.random() * 100).toLocaleString("pt-BR", { maximumFractionDigits: 2 }), 
+                amount: (Math.random() * 1000).toLocaleString("pt-BR", { maximumFractionDigits: 0 }), 
                 state: "confirm",
                 description: "Hello world my brother and my friend - this is your payment for help me"
             });
@@ -42,7 +42,7 @@ const Home = ({ navigation } : any) => {
 
     const handleFounds = async () => {
         setNotifyLoading("loading funds...");
-        return (Math.random() * 10000).toLocaleString("pt-BR", { maximumFractionDigits: 2 }); //.toFixed(4);
+        return (Math.random() * 10000).toLocaleString("pt-BR", { maximumFractionDigits: 0 }); //.toFixed(4);
     }
 
     const loadData = async () => {
@@ -85,56 +85,41 @@ const Home = ({ navigation } : any) => {
         return <Splashscreen message={notifyLoading} />
 
     return (
-        <>
-
+        <View style={Styles.container}>
             <Header>
-                <ButtonIcon icon="person" buttonStyles={[styles.header_profile_button]} iconStyle={{ padding: 12 }} onPress={() => {}}/>
-                <ButtonIcon icon="arrow-redo" buttonStyles={[styles.header_share_button]} onPress={() => {}}/>
-                <ButtonIcon icon="bug" buttonStyles={[styles.header_report_button]} onPress={() => {}}/>
-            </Header>
+                <ButtonIcon icon="person" buttonStyles={[styles.header_button, styles.header_profile_button]}  onPress={() => {}}/>
+                {/* <ButtonIcon icon="arrow-redo" buttonStyles={[styles.header_button, styles.header_share_button]} onPress={() => {}}/> */}
+                <ButtonIcon icon="bug" buttonStyles={[styles.header_button, styles.header_report_button]} onPress={() => {}}/>
+            </Header>            
 
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }} refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} /> } >
-               
-                <View style={Styles.container}>
+            {/* Inormation founds */}
+            <Founds founds={founds}/>
 
-                    {/* Inormation founds */}
-                    <Founds founds={founds}/>
-
-                    {/* Transactions list */}
-                    <Transactions transactions={transactions} navigation={navigation}/>
-
-                </View>
-
-            </ScrollView> 
+            {/* Transactions list */}
+            <Transactions transactions={transactions} navigation={navigation} refreshControll={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}/>
 
             <MenuApp navigation={navigation}/>
-        </>       
+
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    header_share_button: {
-        position: "absolute",
-        right: 0,
-        top: 10,
+    header_button: {
         zIndex: 999,
+        position: "relative",
         marginHorizontal: 15
     },
+    header_share_button: {
+        
+    },
     header_report_button: {
-        position: "absolute",
-        right: 72,
-        top: 10,
-        zIndex: 999,
-        marginHorizontal: 15
+        right: 10,
     }, 
     header_profile_button: {
-        position: "absolute",
-        marginHorizontal: 15,
+        
         backgroundColor: env.COLORS.DEFAULT,
         borderRadius: 50,
-        left: 0,
-        top: 10,
-        zIndex: 9999,
     },
 });
 

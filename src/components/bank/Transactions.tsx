@@ -1,16 +1,18 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import env from "../../../app.configs";
 import { Ionicons } from "@expo/vector-icons";
 import { TransactionType } from "../../pages/bank/Transaction";
 import Styles from "../../stylesheet/Styles";
+import React from "react";
 
 type Props = {
     tag?: "Sats" | "BTC" | "R$" | "$",
     navigation?: any | undefined,
-    transactions: Array<TransactionType>
+    transactions: Array<TransactionType>,
+    refreshControll: React.ReactElement
 }
 
-const Transactions = ({ navigation, transactions, tag } : Props) => {
+const Transactions = ({ navigation, transactions, tag, refreshControll } : Props) => {
   
     tag = tag ? tag : "Sats";
 
@@ -21,8 +23,8 @@ const Transactions = ({ navigation, transactions, tag } : Props) => {
     if(transactions && transactions?.length <= 0) {
         return (
             <>
-                <View style={styles.container_transactions}>
-                    <Text style={styles.nothing_transactions}>Nothing transactions</Text>
+                <View style={[styles.container_transactions, { marginVertical: 160 }]}>
+                    <Text style={styles.nothing_transactions}>Nothing transaction</Text>
                     <View style={{ flex: 1,  alignItems: "center", width: "100%", height: 180 }}>
                         <View style={Styles.endPage}></View>
                     </View>
@@ -32,7 +34,7 @@ const Transactions = ({ navigation, transactions, tag } : Props) => {
     }
 
     return (
-        <>
+        <ScrollView contentContainerStyle={styles.scroll_container} refreshControl={refreshControll}>
             {
                 transactions && transactions.map((transaction, index) => {
 
@@ -65,14 +67,19 @@ const Transactions = ({ navigation, transactions, tag } : Props) => {
                     );
                 })
             }
+
+            
              <View style={{ flex: 1,  alignItems: "center", width: "100%", height: 180 }}>
                 <View style={Styles.endPage}></View>
              </View>
-        </>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
+    scroll_container: {
+        flexGrow: 1
+    },
     container_transactions: {
         width: "100%",
         backgroundColor: env.COLORS.BLACK,

@@ -38,7 +38,7 @@ const Register = ({ navigation }: any) => {
     }
 
     const setUserNameField = (userName: string) => {
-        setUserName(userName.trim());
+        setUserName(userName);
         setAlertCode(0);
     }
 

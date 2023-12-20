@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, headerTransparent: true, cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter }} initialRouteName="Initialize" >
+      <Stack.Navigator screenOptions={options} initialRouteName="Initialize" >
         <Stack.Screen name="Initialize" component={InitialPage} />
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register" component={RegisterPage} />
@@ -36,5 +36,10 @@ const Navigation = () => {
   );
 }
 
+const options = {
+    headerShown: false, 
+    headerTransparent: true, 
+    cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+};
 
 export default Navigation;

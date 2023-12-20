@@ -21,7 +21,7 @@ const env = {
         DEFAULT: "#2D3138",
 
         ICONS: "#FFFFFF",
-        MENU: "rgba(20,20,20,.9)",
+        MENU: "rgba(28,28,28,.9)",
         TRANSPARENT: "rgba(18,41,49, .8)"
     }
 };

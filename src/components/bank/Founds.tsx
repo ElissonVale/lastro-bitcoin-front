@@ -25,6 +25,7 @@ const Founds = ({ founds } : Props) => {
 const styles = StyleSheet.create({
     container_founds: {
         width: "100%",
+        minHeight: 100,
         marginTop: 80,
         marginBottom: 10,
         padding: 10,

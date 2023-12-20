@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
         width: "100%",
         position: "absolute",
-        height: 62,
+        flexDirection: "row",
         top: 0,
     }
 });
